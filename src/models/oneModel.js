@@ -7,6 +7,9 @@ const oneSchema = mongoose.Schema({
   price: {
     type: Number,
   },
+  status: {
+    type: String,
+  },
 });
 
 const One = mongoose.model('one', oneSchema);

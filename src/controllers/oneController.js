@@ -1,6 +1,7 @@
 const { One } = require('../models/oneModel');
 
 const createOne = async (req, res, next) => {
+  // TODO:
   const body = req.body;
   const one = await One.create(body);
   res.status(201).json({ status: 'success', data: one });
@@ -22,7 +23,7 @@ const getOne = async (req, res, next) => {
   });
 };
 
-const getAllOnes = async (req, res, next) => {
+const getManyOnes = async (req, res, next) => {
   const {
     fields,
     sort = '-createdAt', // new to old
@@ -31,27 +32,45 @@ const getAllOnes = async (req, res, next) => {
     filter,
   } = req.query;
 
-  // create inital query but not await it
+  // 0. check how many result
+  const matchingResults = await One.countDocuments(filter);
+  const totalPages = Math.ceil(matchingResults / itemsPerPage);
+
+  if (page > totalPages) {
+    return res.status(200).json({
+      status: 'success',
+      results: 0,
+      data: [],
+    });
+  }
+
+  // 1. create inital query but not await it
   let query = One.find(filter);
 
-  // sorting
+  // 2. sorting
   query = query.sort(sort);
-  // limit fields
+
+  // 3. limit fields
   if (fields) {
     query = query.select(fields);
   }
 
-  // pagination
+  // 4. pagination
   const skip = (page - 1) * itemsPerPage;
   const limit = itemsPerPage;
 
   query = query.skip(skip).limit(limit);
 
-  const ones = await One.find();
-  res.status(200).json({ status: 'success', results: ones.length, data: ones });
+  // 5. finally await query
+  const ones = await query;
+
+  res
+    .status(200)
+    .json({ status: 'success', totalPages, results: ones.length, data: ones });
 };
 
 const updateOne = async (req, res, next) => {
+  // TODO: fix this body
   const body = req.body;
 
   const one = await One.findByIdAndUpdate(req.params.id, body, {
@@ -61,7 +80,7 @@ const updateOne = async (req, res, next) => {
   if (!one) {
     return res.status(404).json({
       status: 'fail',
-      message: 'Cant not find one with provided id',
+      message: 'Can not find one with provided id',
     });
   }
 
@@ -72,7 +91,22 @@ const updateOne = async (req, res, next) => {
 };
 
 const updateManyOnes = async (req, res, next) => {
-  const { updateList, payload } = req.body;
+  // TODO: need to destruct payload
+  const { updateList, ...payload } = req.body;
+
+  // check if id all exist
+  const matchedDocuments = await One.countDocuments({
+    _id: {
+      $in: updateList,
+    },
+  });
+
+  if (matchedDocuments < updateList.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Can not find one with provided ids',
+    });
+  }
 
   const { modifiedCount } = await One.updateMany(
     {
@@ -119,7 +153,7 @@ const deleteManyOnes = async (req, res, next) => {
   if (deletedCount === 0) {
     return res.status(404).json({
       status: 'fail',
-      message: 'Cant not find ones with provided ids',
+      message: 'Can not find ones with provided ids',
     });
   }
 
@@ -133,7 +167,7 @@ const deleteManyOnes = async (req, res, next) => {
 module.exports = {
   createOne,
   getOne,
-  getAllOnes,
+  getManyOnes,
   updateOne,
   updateManyOnes,
   deleteOne,
