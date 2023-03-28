@@ -1,0 +1,19 @@
+{
+  "name": "express-gg",
+  "version": "1.0.11",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "express": "./src/index.js"
+  },
+  "scripts": {
+    "update": "npm version patch && npm pub"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "yargs": "^17.7.1",
+    "yup-schemas": "^1.0.11"
+  }
+}
