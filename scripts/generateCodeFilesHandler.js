@@ -12,9 +12,9 @@ const {
 } = require('./utils');
 
 class GenerateCodeFilesHandler {
-  constructor(singular, plural) {
-    this.cwd = process.cwd();
+  cwd = process.cwd();
 
+  constructor(singular, plural) {
     this.singular = singular;
     this.plural = plural;
   }
@@ -26,60 +26,65 @@ class GenerateCodeFilesHandler {
       modelFileContent,
       routerFileContent,
       schemaFileContent,
-    ] = this.getNewCodeFilesContent();
+    ] = this.#getNewCodeFilesContent();
 
     // 2. write code files
 
     const controllerFilePath = path.join(
-      cwd,
+      this.cwd,
       'src',
       'controllers',
-      getControllerFileName(singular),
+      getControllerFileName(this.singular),
     );
 
     const modelFilePath = path.join(
-      cwd,
+      this.cwd,
       'src',
       'models',
-      getModelFileName(singular),
+      getModelFileName(this.singular),
     );
 
     const routerFilePath = path.join(
-      cwd,
+      this.cwd,
       'src',
       'routes',
-      getRouterFileName(singular),
+      getRouterFileName(this.singular),
     );
 
     const schemaFilePath = path.join(
-      cwd,
+      this.cwd,
       'src',
       'yup',
-      getSchemaFileName(singular),
+      getSchemaFileName(this.singular),
     );
 
-    fs.mkdir('./src/controllers', { recursive: true }, () => {
-      fs.writeFileSync(controllerFilePath, controllerFileContent);
-      console.log(chalk.green(`${getControllerFileName(singular)} created!`));
-    });
+    console.clear();
+    console.log(chalk.blue('Generating code files....'));
 
-    fs.mkdir('./src/models', { recursive: true }, () => {
-      fs.writeFileSync(modelFilePath, modelFileContent);
-      console.log(chalk.green(`${getModelFileName(singular)} created!`));
-    });
+    // controller
+    fs.mkdirSync('./src/controllers', { recursive: true });
+    fs.writeFileSync(controllerFilePath, controllerFileContent);
+    console.log(
+      chalk.green(`${getControllerFileName(this.singular)} created!`),
+    );
 
-    fs.mkdir('./src/routes', { recursive: true }, () => {
-      fs.writeFileSync(routerFilePath, routerFileContent);
-      console.log(chalk.green(`${getRouterFileName(singular)} created!`));
-    });
+    // models
+    fs.mkdirSync('./src/models', { recursive: true });
+    fs.writeFileSync(modelFilePath, modelFileContent);
+    console.log(chalk.green(`${getModelFileName(this.singular)} created!`));
 
-    fs.mkdir('./src/yup', { recursive: true }, () => {
-      fs.writeFileSync(schemaFilePath, schemaFileContent);
-      console.log(chalk.green(`${getSchemaFileName(singular)} created!`));
-    });
+    // routes:
+    fs.mkdirSync('./src/routes', { recursive: true });
+    fs.writeFileSync(routerFilePath, routerFileContent);
+    console.log(chalk.green(`${getRouterFileName(this.singular)} created!`));
+
+    // schema file
+    fs.mkdirSync('./src/yup', { recursive: true });
+    fs.writeFileSync(schemaFilePath, schemaFileContent);
+    console.log(chalk.green(`${getSchemaFileName(this.singular)} created!`));
   };
 
-  getNewCodeFilesContent = () => {
+  #getNewCodeFilesContent = () => {
     const oneControllerPath = path.join(
       __dirname,
       '..',

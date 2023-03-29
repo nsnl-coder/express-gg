@@ -7,6 +7,7 @@ const argv = yargs(hideBin(process.argv)).argv;
 const { isAtRootFolder } = require('./utils');
 const { getAndValidateUserInput, isIncludeTestFiles } = require('./cli');
 const GenerateCodeFilesHandler = require('./generateCodeFilesHandler');
+const GenerateTestFilesHandler = require('./generateTestFilesHandler');
 if (!isAtRootFolder()) return;
 
 // 2. handle base on different input
@@ -25,6 +26,11 @@ const { singular, plural } = resourceName;
 const includeTestFiles = isIncludeTestFiles();
 
 // generate code files: controller, model, routes, yup schema
-const generateCodeFile = new GenerateCodeFilesHandler();
-generateCodeFile.writeCodeFiles();
+const generateCodeFiles = new GenerateCodeFilesHandler(singular, plural);
+generateCodeFiles.writeCodeFiles();
+
 // generate test files
+if (includeTestFiles) {
+  const generateTestFiles = new GenerateTestFilesHandler(singular, plural);
+  generateTestFiles.writeTestFiles();
+}

@@ -34,7 +34,7 @@ const capitalizeFirstLetter = (string) => {
 const getNewFileContent = (path, singular, plural) => {
   let filecontent = fs.readFileSync(path, { encoding: 'utf-8' });
 
-  filecontent = filecontent.replaceAll('ones', singular);
+  filecontent = filecontent.replaceAll('ones', plural);
   filecontent = filecontent.replaceAll('Ones', capitalizeFirstLetter(plural));
   filecontent = filecontent.replaceAll('one', singular);
   filecontent = filecontent.replaceAll('One', capitalizeFirstLetter(singular));

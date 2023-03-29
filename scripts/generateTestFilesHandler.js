@@ -2,7 +2,7 @@ const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
 const prompt = require('prompt-sync')({ sigint: true });
-const { getNewFileName } = require('./utils');
+const { getNewFileName, getNewFileContent } = require('./utils');
 
 class GenerateTestFilesHandler {
   constructor(singular, plural) {
@@ -14,6 +14,9 @@ class GenerateTestFilesHandler {
 
   writeTestFiles() {
     const testDir = path.join(__dirname, '..', 'src', 'test', 'ones');
+
+    fs.mkdirSync(`./src/test/${this.plural}`, { recursive: true });
+    console.log(chalk.blue('\nGenerating test files....'));
 
     fs.readdir(testDir, (err, files) => {
       if (err) {
@@ -30,15 +33,16 @@ class GenerateTestFilesHandler {
           'ones',
           file,
         );
-        const content = convertFileContent(
+
+        const newFileName = getNewFileName(file, this.singular, this.plural);
+        const newFilePath = path.join('src', 'test', this.plural, newFileName);
+        const newContent = getNewFileContent(
           filepath,
           this.singular,
           this.plural,
         );
-        const newFileName = getNewFileName(file, this.singular, this.plural);
-        const newFilePath = path.join('src', 'test', this.plural, newFileName);
 
-        fs.writeFileSync(newFilePath, content);
+        fs.writeFileSync(newFilePath, newContent);
 
         console.log(chalk.green(`${newFileName} created!`));
       });
