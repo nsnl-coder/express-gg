@@ -1,7 +1,7 @@
 const { One } = require('../models/oneModel');
 
 const createOne = async (req, res, next) => {
-  // TODO:
+  // TODO: need to parse body
   const body = req.body;
   const one = await One.create(body);
   res.status(201).json({ status: 'success', data: one });
@@ -70,7 +70,7 @@ const getManyOnes = async (req, res, next) => {
 };
 
 const updateOne = async (req, res, next) => {
-  // TODO: fix this body
+  // TODO: need to destruct this body
   const body = req.body;
 
   const one = await One.findByIdAndUpdate(req.params.id, body, {
@@ -94,7 +94,7 @@ const updateManyOnes = async (req, res, next) => {
   // TODO: need to destruct payload
   const { updateList, ...payload } = req.body;
 
-  // check if id all exist
+  // check if ids in updateList all exist
   const matchedDocuments = await One.countDocuments({
     _id: {
       $in: updateList,

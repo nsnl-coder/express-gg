@@ -10,12 +10,12 @@
     ]
   },
   "bin": {
-    "express": "./src/index.js",
-    "test": "jest --watch"
+    "express": "./scripts/index.js"
   },
   "scripts": {
     "update": "npm version patch && npm pub",
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "start": "node src/index.js"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,7 @@
   "dependencies": {
     "express": "^4.18.2",
     "mongoose": "^7.0.3",
+    "prompt-sync": "^4.2.0",
     "yargs": "^17.7.1",
     "yup-schemas": "^1.0.12"
   },

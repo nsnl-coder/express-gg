@@ -9,9 +9,9 @@ const oneController = require('../controllers/oneController');
 const router = express.Router();
 
 // TODO: apply middlewares to restrict routes
-// TODO: add requiredFields middleware if needed
+// TODO: add requiredFields middleware for createOne route if needed
 // router.use(requireLogin)
-// route.user(requireRoute)
+// route.use(requireRole)
 // requiredFields('')
 
 router.post('/', validateRequest(oneSchema), oneController.createOne);

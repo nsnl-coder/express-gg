@@ -1,15 +1,10 @@
 const mongoose = require('mongoose');
 
 const oneSchema = mongoose.Schema({
-  name: {
-    type: String,
-  },
-  price: {
-    type: Number,
-  },
-  status: {
-    type: String,
-  },
+  // testing purpose only
+  test_string: String,
+  test_number: Number,
+  test_any: String,
 });
 
 const One = mongoose.model('one', oneSchema);

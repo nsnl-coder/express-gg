@@ -4,12 +4,12 @@ const { reqQuery, reqParams, objectIdArray } = require('yup-schemas');
 
 const oneSchema = object({
   body: object({
-    name: string().max(240),
-    price: number().min(0).max(9999),
-    status: string().oneOf(['draft', 'public']),
-    //
     deleteList: objectIdArray,
     updateList: objectIdArray,
+    // for testing only
+    test_string: string().max(240),
+    test_number: number().min(0).max(9999),
+    test_any: string().max(240),
   }),
   params: reqParams,
   query: reqQuery,
