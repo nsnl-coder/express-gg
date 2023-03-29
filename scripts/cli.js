@@ -3,7 +3,6 @@ const fs = require('fs');
 const path = require('path');
 const prompt = require('prompt-sync')({ sigint: true });
 
-//
 const {
   getControllerFileName,
   getModelFileName,
@@ -12,23 +11,6 @@ const {
 } = require('./utils');
 
 const cwd = process.cwd();
-
-const isAtRootFolder = () => {
-  const packageJsonPath = path.join(cwd, './package.json');
-  const isRootFolder = fs.existsSync(packageJsonPath);
-
-  if (!isRootFolder) {
-    console.log(
-      chalk.red(
-        'You are not at root of project because can not find package.json file',
-      ),
-    );
-
-    return false;
-  }
-
-  return true;
-};
 
 const getAndValidateUserInput = () => {
   let singular = prompt('Singular form of your resource? ');
@@ -53,6 +35,11 @@ const getAndValidateUserInput = () => {
       return;
     }
   }
+
+  // check if code files already exist
+  const codeFilesExist = codeFilesAlreadyExist(singular);
+
+  if (codeFilesExist) return null;
 
   return { singular, plural };
 };
@@ -136,7 +123,6 @@ const testFilesAlreadyExist = (plural) => {
 };
 
 module.exports = {
-  isAtRootFolder,
   isValidResourceName,
   getAndValidateUserInput,
   codeFilesAlreadyExist,

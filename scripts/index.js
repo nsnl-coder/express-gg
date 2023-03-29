@@ -1,16 +1,30 @@
 #!/usr/bin/env node
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
+const argv = yargs(hideBin(process.argv)).argv;
 
-// function
+// 1. Check if user is at root folder
+const { isAtRootFolder } = require('./utils');
+const { getAndValidateUserInput, isIncludeTestFiles } = require('./cli');
+const GenerateCodeFilesHandler = require('./generateCodeFilesHandler');
+if (!isAtRootFolder()) return;
 
-// 1. generate file: controller, model, routes, testFile
+// 2. handle base on different input
 
-// 2. de-generate file: controller, model, routes, testFile
-// only delete if the original file has not modified
-
-// 3.
-
-function isRootFolder() {
-  return fs.existsSync('./package.json');
+// handle delete files case
+if (argv.delete || argv.d || argv._.includes('delete')) {
+  console.log('handle delete');
+  return;
 }
 
-console.log('hahaha');
+// get user inputs
+const resourceName = getAndValidateUserInput();
+if (!resourceName) return;
+
+const { singular, plural } = resourceName;
+const includeTestFiles = isIncludeTestFiles();
+
+// generate code files: controller, model, routes, yup schema
+const generateCodeFile = new GenerateCodeFilesHandler();
+generateCodeFile.writeCodeFiles();
+// generate test files
