@@ -5,8 +5,8 @@ const prompt = require('prompt-sync')({ sigint: true });
 const cwd = process.cwd();
 
 const getDeleteFilesOptions = () => {
-  const deleteCodeFiles = prompt('Do you want to delete code files (y/n)? ');
-  const deleteTestFiles = prompt('Do you want to delete test files (y/n)? ');
+  const deleteCodeFiles = prompt('Delete code files (y/n)? ');
+  const deleteTestFiles = prompt('Delete test files (y/n)? ');
 
   return {
     deleteCodeFiles: deleteCodeFiles === 'y' || deleteCodeFiles === 'yes',
@@ -55,7 +55,7 @@ const isValidResourceName = (name) => {
 };
 
 const isIncludeTestFiles = () => {
-  const confirm = prompt('Do you want to include test files (y / n)? ');
+  const confirm = prompt('Include test files (y / n)? ');
 
   if (confirm === 'y' || confirm == 'yes') return true;
   return false;

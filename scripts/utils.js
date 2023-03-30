@@ -29,9 +29,9 @@ const files = (singular) => {
     newSchemaPath: `./src/yup/${singular}Schema.js`,
     //
     oneSetupTestPath: path.join(__dirname, '..', 'src', 'test', 'setup.js'),
-    newSetupTestPath: './src/test/setup2.js',
+    newSetupTestPath: './src/test/setup.js',
     onePackageJsonPath: path.join(__dirname, '..', 'package.json'),
-    newPackageJsonPath: './package2.json',
+    newPackageJsonPath: './package.json',
   };
 };
 

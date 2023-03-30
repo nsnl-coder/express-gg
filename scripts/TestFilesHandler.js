@@ -75,30 +75,21 @@ class TestFilesHandler {
     console.log(chalk.blue('\nGenerating test files....'));
 
     const testDir = path.join(__dirname, '..', 'src', 'test', 'ones');
-    fs.readdir(testDir, (err, files) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
 
-      files.forEach((file) => {
-        const testFilePath = path.join(this.oneTestDir, file);
-        const newTestFileName = getNewFileName(
-          file,
-          this.singular,
-          this.plural,
-        );
-        const newTestFilePath = path.join(this.newTestDir, newTestFileName);
-        const newTestContent = getNewFileContent(
-          testFilePath,
-          this.singular,
-          this.plural,
-        );
+    const files = fs.readdirSync(testDir);
 
-        fs.writeFileSync(newTestFilePath, newTestContent);
+    files.forEach((file) => {
+      const testFilePath = path.join(this.oneTestDir, file);
+      const newTestFileName = getNewFileName(file, this.singular, this.plural);
+      const newTestFilePath = path.join(this.newTestDir, newTestFileName);
+      const newTestContent = getNewFileContent(
+        testFilePath,
+        this.singular,
+        this.plural,
+      );
 
-        console.log(chalk.green(`${newTestFileName} created!`));
-      });
+      fs.writeFileSync(newTestFilePath, newTestContent);
+      console.log(chalk.green(`${newTestFileName} created!`));
     });
   }
 
@@ -137,27 +128,34 @@ class TestFilesHandler {
         test: 'jest',
       };
     }
+    // check for setup.js file
+    if (!fs.existsSync(this.files.newSetupTestPath)) {
+      if (!fs.existsSync('src/test')) fs.mkdirSync('src/test');
+      const oneSetupFileContent = fs.readFileSync(this.files.oneSetupTestPath);
+      fs.writeFileSync(this.files.newSetupTestPath, oneSetupFileContent);
+      console.log(chalk.blue('src/test/setup.js file created'));
+    }
 
     // check for dev dependencies
     if (!newPackageJsonContent.devDependencies) {
       newPackageJsonContent.devDependencies = {};
     }
 
-    const newDevDependencies = Object.keys(
+    const newDevDependenciesKeys = Object.keys(
       newPackageJsonContent.devDependencies,
     );
 
-    const oneDevDependencies = Object.keys(
+    const oneDevDependenciesKeys = Object.keys(
       onePackageJsonContent.devDependencies,
     );
 
-    const isMissingDevDependencies = !oneDevDependencies.every((item) =>
-      newDevDependencies.includes(item),
+    const isMissingDevDependencies = !oneDevDependenciesKeys.every((item) =>
+      newDevDependenciesKeys.includes(item),
     );
 
     if (isMissingDevDependencies) {
-      const missingDependencies = oneDevDependencies
-        .filter((item) => !newDevDependencies.includes(item))
+      const missingDependencies = oneDevDependenciesKeys
+        .filter((item) => !newDevDependenciesKeys.includes(item))
         .join(', ');
 
       newPackageJsonContent.devDependencies = {
@@ -165,8 +163,9 @@ class TestFilesHandler {
         ...onePackageJsonContent.devDependencies,
       };
 
+      console.log(chalk.green('\nChecking package.json....'));
       console.log(
-        chalk.green(
+        chalk.blue(
           `Added missing devDependencies to package.json: ${missingDependencies}`,
         ),
       );
@@ -176,13 +175,6 @@ class TestFilesHandler {
       this.files.newPackageJsonPath,
       JSON.stringify(newPackageJsonContent),
     );
-
-    // check for setup.js file
-    if (!fs.existsSync(this.files.newSetupTestPath)) {
-      if (!fs.existsSync('src/test')) fs.mkdirSync('src/test');
-      const oneSetupFileContent = fs.readFileSync(this.files.oneSetupTestPath);
-      fs.writeFileSync(this.files.newSetupTestPath, oneSetupFileContent);
-    }
 
     if (isMissingDevDependencies) return true;
   }
