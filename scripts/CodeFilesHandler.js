@@ -28,6 +28,8 @@ class CodeFilesHandler {
       this.files.oneSchemaPath,
     ];
 
+    console.log(chalk.blue('Deleting code files...'));
+
     currentPaths.forEach((path, index) => {
       if (!fs.existsSync(path)) return;
 
@@ -40,12 +42,12 @@ class CodeFilesHandler {
 
       if (newContent === currentContent) {
         fs.rmSync(path);
-        console.log(chalk.red(`${path} deleted`));
+        console.log(chalk.green(`${path} deleted`));
         return;
       }
 
       console.log(
-        chalk.yellow(`Can not remove ${path} because it has been edited`),
+        chalk.red(`Can not delete ${path} because it has been edited`),
       );
     });
   };

@@ -4,6 +4,16 @@ const path = require('path');
 const prompt = require('prompt-sync')({ sigint: true });
 const cwd = process.cwd();
 
+const getDeleteFilesOptions = () => {
+  const deleteCodeFiles = prompt('Do you want to delete code files (y/n)? ');
+  const deleteTestFiles = prompt('Do you want to delete test files (y/n)? ');
+
+  return {
+    deleteCodeFiles: deleteCodeFiles === 'y' || deleteCodeFiles === 'yes',
+    deleteTestFiles: deleteTestFiles === 'y' || deleteTestFiles === 'yes',
+  };
+};
+
 const getAndValidateUserInput = () => {
   let singular = prompt('Singular form of your resource? ');
   singular = isValidResourceName(singular);
@@ -71,4 +81,5 @@ module.exports = {
   getAndValidateUserInput,
   isIncludeTestFiles,
   testFilesAlreadyExist,
+  getDeleteFilesOptions,
 };
