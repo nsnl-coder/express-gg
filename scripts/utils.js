@@ -35,6 +35,124 @@ const files = (singular) => {
   };
 };
 
+const readPackageJson = () => {
+  const filespath = files();
+
+  const newPackageJsonBuffer = fs.readFileSync(filespath.newPackageJsonPath, {
+    encoding: 'utf-8',
+  });
+  let newPackageJsonContent = JSON.parse(newPackageJsonBuffer);
+
+  const onePackageJsonBuffer = fs.readFileSync(filespath.onePackageJsonPath, {
+    encoding: 'utf-8',
+  });
+  const onePackageJsonContent = JSON.parse(onePackageJsonBuffer);
+
+  // prepare package.json
+  if (!newPackageJsonContent.dependencies) {
+    newPackageJsonContent.dependencies = {};
+  }
+
+  if (!newPackageJsonContent.scripts) {
+    newPackageJsonContent.scripts = {};
+  }
+
+  if (!newPackageJsonContent.devDependencies) {
+    newPackageJsonContent.devDependencies = {};
+  }
+
+  return {
+    newPackageJsonContent,
+    onePackageJsonContent,
+  };
+};
+
+const checkDevDependencies = (...devDependencies) => {
+  // read package.json
+  const { newPackageJsonContent, onePackageJsonContent } = readPackageJson();
+
+  const newDevDependenciesKeys = Object.keys(
+    newPackageJsonContent.devDependencies,
+  );
+
+  const isMissingDevDependencies = !devDependencies.every((item) =>
+    newDevDependenciesKeys.includes(item),
+  );
+
+  if (isMissingDevDependencies) {
+    const missingDevDependencies = devDependencies.filter(
+      (item) => !newDevDependenciesKeys.includes(item),
+    );
+
+    missingDevDependencies.forEach((key) => {
+      newPackageJsonContent.devDependencies[key] =
+        onePackageJsonContent.devDependencies[key];
+    });
+
+    console.log(
+      chalk.blue('Added missing devDependencies to package.json: '),
+      chalk.green(missingDevDependencies.join(', ')),
+    );
+  }
+
+  const filespath = files();
+  fs.writeFileSync(
+    filespath.newPackageJsonPath,
+    JSON.stringify(newPackageJsonContent),
+  );
+
+  if (isMissingDevDependencies) return true;
+};
+
+const checkDependencies = (...dependencies) => {
+  // check for package.json
+  const { newPackageJsonContent, onePackageJsonContent } = readPackageJson();
+
+  // check for script
+  if (!newPackageJsonContent.scripts.start) {
+    newPackageJsonContent.scripts.start = 'nodemon src/index.js';
+  }
+
+  const newDependenciesKeys = Object.keys(newPackageJsonContent.dependencies);
+
+  const oneDependencies = {};
+
+  dependencies.forEach((packageName) => {
+    oneDependencies[packageName] =
+      onePackageJsonContent.dependencies[packageName];
+  });
+
+  const oneDependenciesKeys = Object.keys(oneDependencies);
+
+  const isMissingDependencies = !oneDependenciesKeys.every((item) =>
+    newDependenciesKeys.includes(item),
+  );
+
+  if (isMissingDependencies) {
+    const missingDependencies = oneDependenciesKeys.filter(
+      (item) => !newDependenciesKeys.includes(item),
+    );
+
+    missingDependencies.forEach((key) => {
+      newPackageJsonContent.dependencies[key] = oneDependencies[key];
+    });
+
+    console.log(
+      chalk.blue(`Added missing dependencies to package.json:`),
+      chalk.green(missingDependencies.join(', ')),
+    );
+  }
+
+  const filespath = files();
+
+  fs.writeFileSync(
+    filespath.newPackageJsonPath,
+    JSON.stringify(newPackageJsonContent),
+  );
+
+  return isMissingDependencies;
+};
+
 const isAtRootFolder = () => {
   const packageJsonPath = path.join(cwd, './package.json');
   const isRootFolder = fs.existsSync(packageJsonPath);
@@ -81,4 +199,6 @@ module.exports = {
   capitalizeFirstLetter,
   getNewFileContent,
   getNewFileName,
+  checkDependencies,
+  checkDevDependencies,
 };

@@ -4,16 +4,22 @@ const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const argv = yargs(hideBin(process.argv)).argv;
 const chalk = require('chalk');
-
 //
 const TestFilesHandler = require('./TestFilesHandler');
 const CodeFilesHandler = require('./CodeFilesHandler');
-const { isAtRootFolder } = require('./utils');
+const { isAtRootFolder, checkDependencies } = require('./utils');
 const {
   getAndValidateUserInput,
   isIncludeTestFiles,
   getDeleteFilesOptions,
 } = require('./cli');
+const initializeProject = require('./init');
+
+// 0. initalize project
+if (argv._.includes('init')) {
+  initializeProject();
+  return;
+}
 
 // 1. Check if user is at root folder
 if (!isAtRootFolder()) return;
@@ -53,11 +59,18 @@ if (includeTestFiles) {
 // 6. if dev,dependencies missing
 let isMissingDevDependencies =
   includeTestFiles && testFilesHandler.setupTests();
-let isMissingDependencies = codeFilesHandler.checkDependencies();
+
+let isMissingDependencies = checkDependencies(
+  'yup-schemas',
+  'yup',
+  'mongoose',
+  'express',
+);
 
 if (isMissingDependencies || isMissingDevDependencies) {
   console.log(
-    chalk.green('\n--> To install missing pakages:'),
+    chalk.green('--> To install missing pakages:'),
     chalk.blue('npm install'),
+    '\n',
   );
 }

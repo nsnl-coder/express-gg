@@ -1,7 +1,12 @@
 const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
-const { getNewFileName, getNewFileContent, files } = require('./utils');
+const {
+  getNewFileName,
+  getNewFileContent,
+  files,
+  checkDevDependencies,
+} = require('./utils');
 
 class TestFilesHandler {
   constructor(singular, plural) {
@@ -137,46 +142,14 @@ class TestFilesHandler {
     }
 
     // check for dev dependencies
-    if (!newPackageJsonContent.devDependencies) {
-      newPackageJsonContent.devDependencies = {};
-    }
-
-    const newDevDependenciesKeys = Object.keys(
-      newPackageJsonContent.devDependencies,
+    const isMissingDevDependencies = checkDevDependencies(
+      'jest',
+      'mongodb-memory-server',
+      'nodemon',
+      'supertests',
     );
 
-    const oneDevDependenciesKeys = Object.keys(
-      onePackageJsonContent.devDependencies,
-    );
-
-    const isMissingDevDependencies = !oneDevDependenciesKeys.every((item) =>
-      newDevDependenciesKeys.includes(item),
-    );
-
-    if (isMissingDevDependencies) {
-      const missingDependencies = oneDevDependenciesKeys
-        .filter((item) => !newDevDependenciesKeys.includes(item))
-        .join(', ');
-
-      newPackageJsonContent.devDependencies = {
-        ...newPackageJsonContent.devDependencies,
-        ...onePackageJsonContent.devDependencies,
-      };
-
-      console.log(chalk.green('\nChecking package.json....'));
-      console.log(
-        chalk.blue(
-          `Added missing devDependencies to package.json: ${missingDependencies}`,
-        ),
-      );
-    }
-
-    fs.writeFileSync(
-      this.files.newPackageJsonPath,
-      JSON.stringify(newPackageJsonContent),
-    );
-
-    if (isMissingDevDependencies) return true;
+    return isMissingDevDependencies;
   }
 }
 
