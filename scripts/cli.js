@@ -2,14 +2,6 @@ const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
 const prompt = require('prompt-sync')({ sigint: true });
-
-const {
-  getControllerFileName,
-  getModelFileName,
-  getRouterFileName,
-  getSchemaFileName,
-} = require('./utils');
-
 const cwd = process.cwd();
 
 const getAndValidateUserInput = () => {
@@ -30,16 +22,11 @@ const getAndValidateUserInput = () => {
       ),
     );
 
-    if (isContinue !== 'y' || isContinue !== 'yes') {
+    if (isContinue !== 'y' && isContinue !== 'yes') {
       console.log(chalk.red('existed'));
       return;
     }
   }
-
-  // check if code files already exist
-  const codeFilesExist = codeFilesAlreadyExist(singular);
-
-  if (codeFilesExist) return null;
 
   return { singular, plural };
 };
@@ -55,49 +42,6 @@ const isValidResourceName = (name) => {
   }
 
   return name;
-};
-
-const codeFileExist = (filepath, filename) => {
-  let shortenPath = filepath.replace(cwd, '');
-
-  if (fs.existsSync(filepath)) {
-    console.log(
-      chalk.red(
-        `${shortenPath} already exists! You can delete ${filename} and try again!`,
-      ),
-    );
-    return true;
-  }
-
-  return false;
-};
-
-const codeFilesAlreadyExist = (singular) => {
-  const controllerFileName = getControllerFileName(singular);
-  const modelFileName = getModelFileName(singular);
-  const routerFilename = getRouterFileName(singular);
-  const yupFilename = getSchemaFileName(singular);
-
-  //
-  const modelPath = path.join(cwd, 'src', 'models', `${modelFileName}`);
-  const routerPath = path.join(cwd, 'src', 'yup', `${routerFilename}`);
-  const yupPath = path.join(cwd, 'src', 'yup', `${yupFilename}`);
-  const controllerPath = path.join(
-    cwd,
-    'src',
-    'controllers',
-    controllerFileName,
-  );
-
-  let isExisted =
-    codeFileExist(controllerPath, controllerFileName) ||
-    codeFileExist(modelPath, modelFileName) ||
-    codeFileExist(routerPath, routerFilename) ||
-    codeFileExist(yupPath, yupFilename);
-
-  if (isExisted) return true;
-
-  return false;
 };
 
 const isIncludeTestFiles = () => {
@@ -125,7 +69,6 @@ const testFilesAlreadyExist = (plural) => {
 module.exports = {
   isValidResourceName,
   getAndValidateUserInput,
-  codeFilesAlreadyExist,
   isIncludeTestFiles,
   testFilesAlreadyExist,
 };

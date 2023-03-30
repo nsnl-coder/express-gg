@@ -6,31 +6,29 @@ const argv = yargs(hideBin(process.argv)).argv;
 // 1. Check if user is at root folder
 const { isAtRootFolder } = require('./utils');
 const { getAndValidateUserInput, isIncludeTestFiles } = require('./cli');
-const GenerateCodeFilesHandler = require('./generateCodeFilesHandler');
-const GenerateTestFilesHandler = require('./generateTestFilesHandler');
+const CodeFilesHandler = require('./CodeFilesHandler');
+const TestFilesHandler = require('./TestFilesHandler');
 if (!isAtRootFolder()) return;
 
-// 2. handle base on different input
+// 2. collect resource info
+const resourceName = getAndValidateUserInput();
+if (!resourceName) return;
+const { singular, plural } = resourceName;
 
-// handle delete files case
+const codeFilesHandler = new CodeFilesHandler(singular, plural);
+const testFilesHandler = new TestFilesHandler(singular, plural);
+
+// 4. handle delete files case
+
 if (argv.delete || argv.d || argv._.includes('delete')) {
-  console.log('handle delete');
+  codeFilesHandler.deleteCodeFiles();
   return;
 }
 
-// get user inputs
-const resourceName = getAndValidateUserInput();
-if (!resourceName) return;
-
-const { singular, plural } = resourceName;
+// 5. handle generate file cases
 const includeTestFiles = isIncludeTestFiles();
+codeFilesHandler.generateCodeFiles();
 
-// generate code files: controller, model, routes, yup schema
-const generateCodeFiles = new GenerateCodeFilesHandler(singular, plural);
-generateCodeFiles.writeCodeFiles();
-
-// generate test files
 if (includeTestFiles) {
-  const generateTestFiles = new GenerateTestFilesHandler(singular, plural);
-  generateTestFiles.writeTestFiles();
+  testFilesHandler.generateTestFiles();
 }
