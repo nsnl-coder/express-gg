@@ -88,6 +88,8 @@ class CodeFilesHandler {
     console.log(chalk.green(`${this.files.schemaFileName} created!`));
   };
 
+  #checkDependencies() {}
+
   #getNewCodeFilesContent = () => {
     const oneFilesPaths = [
       this.files.oneControllerPath,

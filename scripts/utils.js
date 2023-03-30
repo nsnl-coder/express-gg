@@ -4,52 +4,34 @@ const chalk = require('chalk');
 
 const cwd = process.cwd();
 
-//
-const getControllerFileName = (singular) => `${singular}Controller.js`;
-const getModelFileName = (singular) => `${singular}Model.js`;
-const getRouterFileName = (singular) => `${singular}Routes.js`;
-const getSchemaFileName = (singular) => `${singular}Schema.js`;
-
-//
-const getNewControllerPath = (singular) => {
-  return `./src/controllers/${singular}Controller.js`;
-};
-
-const getNewModelPath = (singular) => `./src/models/${singular}Model.js`;
-const getNewRouterPath = (singular) => `./src/routes/${singular}Routes.js`;
-const getNewSchemaPath = (singular) => `./src/yup/${singular}Schema.js`;
-
-//
-const getOneControllerPath = () => {
-  return path.join(__dirname, '..', 'src', 'controllers', 'oneController.js');
-};
-const getOneModelPath = () => {
-  return path.join(__dirname, '..', 'src', 'models', 'oneModel.js');
-};
-const getOneRouterPath = () => {
-  return path.join(__dirname, '..', 'src', 'routes', 'oneRoutes.js');
-};
-const getOneSchemaPath = () => {
-  return path.join(__dirname, '..', 'src', 'yup', 'oneSchema.js');
-};
-//
 const files = (singular) => {
   return {
     //
-    controllerFileName: getControllerFileName(singular),
-    modelFileName: getModelFileName(singular),
-    routerFilename: getRouterFileName(singular),
-    schemaFileName: getSchemaFileName(singular),
+    controllerFileName: `${singular}Controller.js`,
+    modelFileName: `${singular}Model.js`,
+    routerFilename: `${singular}Routes.js`,
+    schemaFileName: `${singular}Schema.js`,
     //
-    oneControllerPath: getOneControllerPath(),
-    oneModelPath: getOneModelPath(),
-    oneRoutesPath: getOneRouterPath(),
-    oneSchemaPath: getOneSchemaPath(),
+    oneControllerPath: path.join(
+      __dirname,
+      '..',
+      'src',
+      'controllers',
+      'oneController.js',
+    ),
+    oneModelPath: path.join(__dirname, '..', 'src', 'models', 'oneModel.js'),
+    oneRoutesPath: path.join(__dirname, '..', 'src', 'routes', 'oneRoutes.js'),
+    oneSchemaPath: path.join(__dirname, '..', 'src', 'yup', 'oneSchema.js'),
     //
-    newControllerPath: getNewControllerPath(singular),
-    newModelPath: getNewModelPath(singular),
-    newRouterpath: getNewRouterPath(singular),
-    newSchemaPath: getNewSchemaPath(singular),
+    newControllerPath: `./src/controllers/${singular}Controller.js`,
+    newModelPath: `./src/models/${singular}Model.js`,
+    newRouterpath: `./src/routes/${singular}Routes.js`,
+    newSchemaPath: `./src/yup/${singular}Schema.js`,
+    //
+    oneSetupTestPath: path.join(__dirname, '..', 'src', 'test', 'setup.js'),
+    newSetupTestPath: './src/test/setup2.js',
+    onePackageJsonPath: path.join(__dirname, '..', 'package.json'),
+    newPackageJsonPath: './package2.json',
   };
 };
 
@@ -63,10 +45,8 @@ const isAtRootFolder = () => {
         'You are not at root of project because can not find package.json file in current working directory.',
       ),
     );
-
     return false;
   }
-
   return true;
 };
 

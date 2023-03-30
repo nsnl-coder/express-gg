@@ -1,4 +1,11 @@
 #!/usr/bin/env node
+
+const TestFilesHandler = require('./TestFilesHandler');
+const testFilesHandler = new TestFilesHandler();
+
+testFilesHandler.setupTests();
+
+return;
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const argv = yargs(hideBin(process.argv)).argv;
@@ -10,8 +17,9 @@ const {
   isIncludeTestFiles,
   getDeleteFilesOptions,
 } = require('./cli');
+
 const CodeFilesHandler = require('./CodeFilesHandler');
-const TestFilesHandler = require('./TestFilesHandler');
+// const TestFilesHandler = require('./TestFilesHandler');
 if (!isAtRootFolder()) return;
 
 // 2. collect resource info
@@ -20,7 +28,7 @@ if (!resourceName) return;
 const { singular, plural } = resourceName;
 
 const codeFilesHandler = new CodeFilesHandler(singular, plural);
-const testFilesHandler = new TestFilesHandler(singular, plural);
+// const testFilesHandler = new TestFilesHandler(singular, plural);
 
 // 4. handle delete files case
 

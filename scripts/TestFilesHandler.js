@@ -1,7 +1,7 @@
 const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
-const { getNewFileName, getNewFileContent } = require('./utils');
+const { getNewFileName, getNewFileContent, files } = require('./utils');
 
 class TestFilesHandler {
   constructor(singular, plural) {
@@ -12,6 +12,7 @@ class TestFilesHandler {
     //
     this.oneTestDir = path.join(__dirname, '..', 'src', 'test', 'ones');
     this.newTestDir = `./src/test/${plural}`;
+    this.files = files(singular);
   }
 
   deleteTestFiles() {
@@ -23,7 +24,6 @@ class TestFilesHandler {
       }
 
       console.log(chalk.blue('Deleting test files...'));
-      let modifiedCount = 0;
 
       files.forEach((filename) => {
         const newTestFileName = getNewFileName(
@@ -41,10 +41,7 @@ class TestFilesHandler {
           this.plural,
         );
 
-        if (!fs.existsSync(newTestFilePath)) {
-          modifiedCount++;
-          return;
-        }
+        if (!fs.existsSync(newTestFilePath)) return;
 
         const currentContent = fs.readFileSync(newTestFilePath, {
           encoding: 'utf-8',
@@ -103,6 +100,91 @@ class TestFilesHandler {
         console.log(chalk.green(`${newTestFileName} created!`));
       });
     });
+  }
+
+  setupTests() {
+    // check for package.json
+    const newPackageJsonBuffer = fs.readFileSync(
+      this.files.newPackageJsonPath,
+      {
+        encoding: 'utf-8',
+      },
+    );
+    let newPackageJsonContent = JSON.parse(newPackageJsonBuffer);
+
+    const onePackageJsonBuffer = fs.readFileSync(
+      this.files.onePackageJsonPath,
+      {
+        encoding: 'utf-8',
+      },
+    );
+    const onePackageJsonContent = JSON.parse(onePackageJsonBuffer);
+
+    if (!newPackageJsonContent.jest) {
+      newPackageJsonContent.jest = {
+        testEnvironment: 'node',
+        setupFileAfterEnv: ['./src/test/setup.js'],
+      };
+    }
+
+    if (!newPackageJsonContent.scripts) {
+      newPackageJsonContent.scripts = {};
+    }
+
+    if (!newPackageJsonContent.scripts.test) {
+      newPackageJsonContent.scripts = {
+        ...newPackageJsonContent.scripts,
+        test: 'jest',
+      };
+    }
+
+    // check for dev dependencies
+    if (!newPackageJsonContent.devDependencies) {
+      newPackageJsonContent.devDependencies = {};
+    }
+
+    const newDevDependencies = Object.keys(
+      newPackageJsonContent.devDependencies,
+    );
+
+    const oneDevDependencies = Object.keys(
+      onePackageJsonContent.devDependencies,
+    );
+
+    const isMissingDevDependencies = !oneDevDependencies.every((item) =>
+      newDevDependencies.includes(item),
+    );
+
+    if (isMissingDevDependencies) {
+      const missingDependencies = oneDevDependencies
+        .filter((item) => !newDevDependencies.includes(item))
+        .join(', ');
+
+      newPackageJsonContent.devDependencies = {
+        ...newPackageJsonContent.devDependencies,
+        ...onePackageJsonContent.devDependencies,
+      };
+
+      console.log(
+        chalk.green(
+          `Added missing devDependencies to package.json: ${missingDependencies}`,
+        ),
+      );
+    }
+
+    fs.writeFileSync(
+      this.files.newPackageJsonPath,
+      JSON.stringify(newPackageJsonContent),
+    );
+
+    // check for setup.js file
+    if (!fs.existsSync(this.files.newSetupTestPath)) {
+      if (!fs.existsSync('src/test')) fs.mkdirSync('src/test');
+      const oneSetupFileContent = fs.readFileSync(this.files.oneSetupTestPath);
+      fs.writeFileSync(this.files.newSetupTestPath, oneSetupFileContent);
+    }
+
+    if (isMissingDevDependencies) return true;
   }
 }
 

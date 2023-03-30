@@ -14,6 +14,12 @@ Install it locally:
   npm i express-gg --save-dev
 ```
 
+## Install dependencies
+
+```bash
+  npm i yup-schemas mongoose express
+```
+
 ## Generate files
 
 if you install the package globally, simply just run express and follow the instruction:
@@ -40,6 +46,12 @@ Or, if you install it locally:
 If you choose to generate test files, you got 35 pre-written test for all the routes.  
 These are the common tests that are the same for every resource.  
 Therefore, you need to add more tests specific to every route such as auth tests.
+
+To run test, you need to install these dependencies:
+
+```bash
+  npm i jest mongodb-memory-server supertest --save-dev
+```
 
 ## Delete Files
 
