@@ -29,7 +29,13 @@ if (argv._.includes('init')) {
   return;
 }
 
-if (!isWorkingDirectoryClean()) return;
+if (
+  !argv.d &&
+  !argv.delete &&
+  !argv._.includes('delete') &&
+  !isWorkingDirectoryClean()
+)
+  return;
 
 // 1. Check if user is at root folder
 if (!isAtRootFolder()) return;

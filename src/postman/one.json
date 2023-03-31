@@ -125,7 +125,7 @@
         "disableBodyPruning": true
       },
       "request": {
-        "method": "GET",
+        "method": "PUT",
         "header": [],
         "body": {
           "mode": "raw",
@@ -165,7 +165,7 @@
         "disableBodyPruning": true
       },
       "request": {
-        "method": "GET",
+        "method": "DELETE",
         "header": [],
         "body": {
           "mode": "raw",
