@@ -61,8 +61,6 @@ describe.skip('auth check', () => {
       email: 'test2@test.com',
     });
 
-    cookie = await signup({ role: 'user' });
-
     const response = await request(app)
       .post('/api/ones')
       .set('Cookie', cookie)
@@ -76,7 +74,7 @@ describe.skip('auth check', () => {
 
 describe.skip('required fields', () => {
   it('should return error if something is missing', async () => {
-    const { body } = await request(app)
+    const response = await request(app)
       .post('/api/ones')
       .send({})
       .set('Cookie', cookie)
@@ -90,6 +88,6 @@ describe.skip('data validation', () => {
       .post('/api/ones')
       .send({})
       .set('Cookie', cookie)
-      .expect(403);
+      .expect(400);
   });
 });

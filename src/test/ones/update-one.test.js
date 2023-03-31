@@ -12,7 +12,7 @@ describe.skip('auth check', () => {
   it('should return error if user is not logged in', async () => {
     cookie = '';
     const response = await request(app)
-      .post('/api/ones')
+      .put('/api/ones/some-id')
       .set('Cookie', cookie)
       .expect(401);
 
@@ -28,7 +28,7 @@ describe.skip('auth check', () => {
     });
 
     const response = await request(app)
-      .post('/api/ones')
+      .put('/api/ones/some-id')
       .set('Cookie', cookie)
       .expect(401);
 
@@ -42,10 +42,8 @@ describe.skip('auth check', () => {
       email: 'test2@test.com',
     });
 
-    cookie = await signup({ role: 'user' });
-
     const response = await request(app)
-      .post('/api/ones')
+      .put('/api/ones/some-id')
       .set('Cookie', cookie)
       .expect(403);
 
@@ -58,10 +56,10 @@ describe.skip('auth check', () => {
 describe.skip('data validation', () => {
   it('should return error if validation fail', async () => {
     const { body } = await request(app)
-      .post('/api/ones')
+      .put('/api/ones')
       .send({})
       .set('Cookie', cookie)
-      .expect(403);
+      .expect(400);
   });
 });
 

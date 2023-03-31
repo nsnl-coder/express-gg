@@ -17,7 +17,7 @@ describe.skip('auth check', () => {
   it('should return error if user is not logged in', async () => {
     cookie = '';
     const response = await request(app)
-      .post('/api/ones')
+      .delete('/api/ones/some-id')
       .set('Cookie', cookie)
       .expect(401);
 
@@ -33,7 +33,7 @@ describe.skip('auth check', () => {
     });
 
     const response = await request(app)
-      .post('/api/ones')
+      .delete('/api/ones/some-id')
       .set('Cookie', cookie)
       .expect(401);
 
@@ -47,10 +47,8 @@ describe.skip('auth check', () => {
       email: 'test2@test.com',
     });
 
-    cookie = await signup({ role: 'user' });
-
     const response = await request(app)
-      .post('/api/ones')
+      .delete('/api/ones/some-id')
       .set('Cookie', cookie)
       .expect(403);
 
@@ -59,8 +57,8 @@ describe.skip('auth check', () => {
     );
   });
 });
-
 // ===========================================
+
 it('should delete one', async () => {
   let one = await createOne();
   const id = one._id;
