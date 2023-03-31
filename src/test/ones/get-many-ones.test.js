@@ -61,7 +61,6 @@ it('should return all ones', async () => {
     .set('Cookie', cookie)
     .expect(200);
 
-  // TODO:
   expect(response.body.data[0].test_string).toEqual('a');
   expect(response.body.data[0].test_number).toEqual(11);
   expect(response.body.data[0].test_any).toEqual('draft');
@@ -71,8 +70,6 @@ it('should return all ones', async () => {
 
 describe('limit fields', () => {
   it('should return one with only 2 selected fields: test_string and test_any', async () => {
-    // TODO: fix fields=, fix expect
-
     const { body } = await request(app)
       .get(`/api/ones?fields=test_string,test_any`)
       .set('Cookie', cookie)
@@ -164,8 +161,6 @@ describe('itemPerPage & page', () => {
 });
 
 describe('sorting', () => {
-  // TODO: need to fix
-
   it('should sort by number from high to low', async () => {
     const { body } = await request(app)
       .get('/api/ones?sort=-test_number')
@@ -190,7 +185,6 @@ describe('sorting', () => {
 });
 
 it('should work with combination of query types', async () => {
-  // TODO:
   const query =
     'fields=test_string,test_number&page=1&itemsPerPage=4&sort=test_number';
 

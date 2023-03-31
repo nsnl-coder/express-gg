@@ -12,6 +12,9 @@ const router = express.Router();
 router.use(requireLogin);
 router.use(requireRole('admin'));
 
+router.get('/:id', validateRequest(oneSchema), oneController.getOne);
+router.get('/', validateRequest(oneSchema), oneController.getManyOnes);
+
 router.post(
   '/',
   // TODO: FIX THIS REQUIRED FIELD
@@ -19,9 +22,6 @@ router.post(
   validateRequest(oneSchema),
   oneController.createOne,
 );
-
-router.get('/:id', validateRequest(oneSchema), oneController.getOne);
-router.get('/', validateRequest(oneSchema), oneController.getManyOnes);
 
 router.put('/:id', validateRequest(oneSchema), oneController.updateOne);
 router.put('/', validateRequest(oneSchema), oneController.updateManyOnes);

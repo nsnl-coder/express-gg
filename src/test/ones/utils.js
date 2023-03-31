@@ -1,8 +1,6 @@
-const request = require('supertest');
-const { app } = require('../../config/app');
+const { One } = require('../../models/oneModel');
 
 // TODO:
-
 // 1. Handle all auth check in all route
 // 2. Handle required fields in create route
 // 3. Handle data validation in updateOne, updateManyOnes, createOne (can copy code)
@@ -10,16 +8,14 @@ const { app } = require('../../config/app');
 // 5. Handle side effect when delete one, or delete many ones
 
 const createOne = async (data) => {
-  const { body } = await request(app)
-    .post('/api/ones')
-    .send({
-      test_string: 'testname',
-      test_number: 10,
-      test_any: 'draft',
-      ...data,
-    });
+  const one = await One.create({
+    test_string: 'testname',
+    test_number: 10,
+    test_any: 'draft',
+    ...data,
+  });
 
-  return body.data;
+  return JSON.parse(JSON.stringify(one));
 };
 
 module.exports = { createOne };
