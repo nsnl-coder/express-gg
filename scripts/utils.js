@@ -205,18 +205,29 @@ const insertCode = (filepath, insertPoint, code) => {
 };
 
 const { spawnSync } = require('child_process');
-const isWorkingTreeClean = () => {
+
+const isWorkingDirectoryClean = () => {
+  if (!fs.existsSync('.git')) {
+    console.log(
+      chalk.red('Not a repository! Initialize a git repo using: git init'),
+    );
+    return false;
+  }
+
   const result = spawnSync('git', ['status', '--porcelain']);
   const output = result.stdout.toString().trim();
 
   if (output) {
-    console.log('Working directory is not clean.');
-  } else {
-    console.log('Working directory is clean.');
+    console.log(
+      chalk.red(
+        'Working directory is not clean! Commit all of your changes and try again!',
+      ),
+    );
+    return false;
   }
-};
 
-isWorkingTreeClean();
+  return true;
+};
 
 module.exports = {
   files,
@@ -228,4 +239,5 @@ module.exports = {
   checkDevDependencies,
   readPackageJson,
   insertCode,
+  isWorkingDirectoryClean,
 };

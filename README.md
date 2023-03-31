@@ -5,41 +5,56 @@
 Install it globally:
 
 ```bash
-  npm i -g express-gg
+$  npm i -g express-gg
 ```
 
 Install it locally:
 
 ```bash
-  npm i express-gg --save-dev
+$  npm i express-gg --save-dev
 ```
 
-## Install dependencies
+## Initialize new project
 
 ```bash
-  npm i yup-schemas mongoose express
+$  gg init
+```
+
+`gg init` will create common express folders and files. After running the command, you can run:
+
+```bash
+$  npm start
 ```
 
 ## Generate files
 
-if you install the package globally, simply just run express and follow the instruction:
+if you install the package globally, simply just run `gg` and follow the instruction:
 
 ```bash
-  express
+  gg
 ```
 
 Or, if you install it locally:
 
 ```bash
-  npx express
+  npx gg
 ```
 
-## This command with generate 4 files with sample codes:
+`gg` command only run when your working directory is clean. if your current directory is not a git repo:
+
+```bash
+  $ git init
+  $ git add .
+  $ git commit -m "inital commit"
+```
+
+## This command with generate 5 files with sample codes:
 
 - `controller`: already implement `crud operations` handler
 - `model`: contains mongoose schema
 - `routes`: contains all common route needed for a resource
 - `yupschema`: this schema is used to define data validation rules
+- `postman`: sample postman collection, you can use this to import to postman
 
 ## Generate test files
 
@@ -47,10 +62,10 @@ If you choose to generate test files, you got 35 pre-written test for all the ro
 These are the common tests that are the same for every resource.  
 Therefore, you need to add more tests specific to every route such as auth tests.
 
-To run test, you need to install these dependencies:
+When you run `gg` command and select tests, it will check if your project missing any packages, you need to install them:
 
 ```bash
-  npm i jest mongodb-memory-server supertest --save-dev
+  npm install
 ```
 
 ## Delete Files
@@ -58,30 +73,16 @@ To run test, you need to install these dependencies:
 if you install the package globally, simply just run express and follow the instruction:
 
 ```bash
-  express -d
+  gg -d
 ```
 
 Or, if you install it locally:
 
 ```bash
-  npx express -d
+  npx gg -d
 ```
 
-This command only delete the files that are not modified since generated.
-
-## Add your router to express app
-
-Don't forget to add your router to express app to make it run.
-
-```js
-const express = require('express');
-const app = express();
-
-app
-  .use
-  // import your router and put it here
-  ();
-```
+This command only delete the files that `are not modified` in comparision with generated version.
 
 ## Dependencies
 
@@ -90,3 +91,14 @@ You should only install this package as dev dependecies.
 ### what are test_number, test_string, test_any?
 
 These fields are being used to run test only, if you don't write test, simply just remove them.
+
+### Notes
+
+In `./src/routes/index.js`, there is one line of code:
+
+```javascript
+// #insert__routers
+```
+
+This line of code is used to auto import newly created router to your express app when you run `gg` command.
+Don't delete it if you want auto import.

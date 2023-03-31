@@ -73,6 +73,10 @@ const initializeProject = () => {
     console.log(
       chalk.green('--> To install missing packages:'),
       chalk.blue('npm install'),
+    );
+    console.log(
+      chalk.green('--> Start your project:'),
+      chalk.blue('npm start'),
       '\n',
     );
   }

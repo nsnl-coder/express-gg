@@ -9,7 +9,12 @@ const chalk = require('chalk');
 //
 const TestFilesHandler = require('./TestFilesHandler');
 const CodeFilesHandler = require('./CodeFilesHandler');
-const { isAtRootFolder, checkDependencies } = require('./utils');
+const {
+  isAtRootFolder,
+  checkDependencies,
+  isWorkingProcessClean,
+  isWorkingDirectoryClean,
+} = require('./utils');
 const {
   getAndValidateUserInput,
   isIncludeTestFiles,
@@ -23,6 +28,8 @@ if (argv._.includes('init')) {
   initializeProject();
   return;
 }
+
+if (!isWorkingDirectoryClean()) return;
 
 // 1. Check if user is at root folder
 if (!isAtRootFolder()) return;
