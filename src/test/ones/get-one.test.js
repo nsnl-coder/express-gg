@@ -16,30 +16,45 @@ beforeEach(() => {
 describe.skip('auth check', () => {
   it('should return error if user is not logged in', async () => {
     cookie = '';
-    await request(app).post('/api/ones').set('Cookie', cookie).expect(401);
-  });
-
-  it('should return error if user is not verified', async () => {
-    cookie = signup({ isVerified: false });
     const response = await request(app)
       .post('/api/ones')
       .set('Cookie', cookie)
       .expect(401);
 
-    expect(response.body).toEqual(
+    expect(response.body.message).toBe(
+      'You are not logged in! Please logged in to perform the action',
+    );
+  });
+
+  it('should return error if user is not verified', async () => {
+    const { cookie } = await signup({
+      isVerified: false,
+      email: 'test2@test.com',
+    });
+
+    const response = await request(app)
+      .post('/api/ones')
+      .set('Cookie', cookie)
+      .expect(401);
+
+    expect(response.body.message).toEqual(
       'Please verified your email to complete this action!',
     );
   });
 
   it('should return error if user is not admin', async () => {
-    cookie = signup({ role: 'user' });
+    const { cookie } = await signup({
+      email: 'test2@test.com',
+    });
 
-    const { body } = await request(app)
+    cookie = await signup({ role: 'user' });
+
+    const response = await request(app)
       .post('/api/ones')
       .set('Cookie', cookie)
       .expect(403);
 
-    expect(body.message).toEqual(
+    expect(response.body.message).toEqual(
       'You do not have permission to perform this action',
     );
   });
