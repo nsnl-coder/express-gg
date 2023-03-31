@@ -7,7 +7,7 @@ const { app } = require('../../config/app');
 // 2. Handle required fields in create route
 // 3. Handle data validation in updateOne, updateManyOnes, createOne (can copy code)
 // 4. Handle objectid does not exist in req.body (if has)
-// 5. Handle sideeffect when delete one, or delete many ones
+// 5. Handle side effect when delete one, or delete many ones
 
 const createOne = async (data) => {
   const { body } = await request(app)

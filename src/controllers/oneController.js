@@ -75,6 +75,8 @@ const updateOne = async (req, res, next) => {
 
   const one = await One.findByIdAndUpdate(req.params.id, body, {
     new: true,
+    runValidators: true,
+
   });
 
   if (!one) {
