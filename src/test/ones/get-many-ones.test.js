@@ -40,7 +40,7 @@ describe.skip('auth check', () => {
   });
 
   it('should return error if user is not admin', async () => {
-    cookie = signup({ role: 'admin' });
+    cookie = signup({ role: 'user' });
 
     const { body } = await request(app)
       .post('/api/ones')

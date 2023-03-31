@@ -4,6 +4,7 @@ const { reqQuery, reqParams, objectIdArray } = require('yup-schemas');
 
 const oneSchema = object({
   body: object({
+    //
     deleteList: objectIdArray,
     updateList: objectIdArray,
     // for testing only
