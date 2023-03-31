@@ -48,7 +48,7 @@ Or, if you install it locally:
   $ git commit -m "inital commit"
 ```
 
-## This command with generate 5 files with sample codes:
+## `gg` command with generate 5 files with sample codes:
 
 - `controller`: already implement `crud operations` handler
 - `model`: contains mongoose schema
@@ -76,13 +76,13 @@ if you install the package globally, simply just run express and follow the inst
   gg -d
 ```
 
-Or, if you install it locally:
+**Or, if you install it locally:**
 
 ```bash
   npx gg -d
 ```
 
-This command only delete the files that `are not modified` in comparision with generated version.
+`gg -d` command only delete the files that `are not modified` in comparision with generated version.
 
 ## Dependencies
 
