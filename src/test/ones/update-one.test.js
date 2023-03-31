@@ -2,10 +2,28 @@ const request = require('supertest');
 const { app } = require('../../config/app');
 const { createOne } = require('./utils');
 
-let cookie;
+let cookie = '';
 
-beforeEach(() => {
-  cookie = '';
+beforeEach(async () => {
+  // const { cookie: newCookie } = await signup({ role: 'admin' });
+  // cookie = newCookie;
+});
+
+it('shoud update the one', async () => {
+  const one = await createOne();
+  expect(one.test_number).toEqual(10);
+
+  const { body } = await request(app)
+    .put(`/api/ones/${one._id}`)
+    .send({
+      test_number: 24,
+      test_string: 'updated',
+    })
+    .set('Cookie', cookie)
+    .expect(200);
+
+  expect(body.data.test_number).toEqual(24);
+  expect(body.data.test_string).toEqual('updated');
 });
 
 describe.skip('auth check', () => {
@@ -64,23 +82,6 @@ describe.skip('data validation', () => {
 });
 
 // ===========================================
-
-it('shoud update the one', async () => {
-  const one = await createOne();
-  expect(one.test_number).toEqual(10);
-
-  const { body } = await request(app)
-    .put(`/api/ones/${one._id}`)
-    .send({
-      test_number: 24,
-      test_string: 'updated',
-    })
-    .set('Cookie', cookie)
-    .expect(200);
-
-  expect(body.data.test_number).toEqual(24);
-  expect(body.data.test_string).toEqual('updated');
-});
 
 it('should return error if objectid is not valid', async () => {
   const { body } = await request(app)

@@ -2,9 +2,12 @@ const request = require('supertest');
 const { app } = require('../../config/app');
 const { createOne } = require('./utils');
 
-let cookie;
+let cookie = '';
 
 beforeEach(async () => {
+  // const { cookie: newCookie } = await signup({ role: 'admin' });
+  // cookie = newCookie;
+
   // create 6 ones
   await createOne({ test_number: 11, test_string: 'a' });
   await createOne({ test_number: 12, test_string: 'd' });
@@ -12,14 +15,7 @@ beforeEach(async () => {
   await createOne({ test_number: 14, test_string: 'e' });
   await createOne({ test_number: 15, test_string: 'f' });
   await createOne({ test_number: 16, test_string: 'b' });
-
-  cookie = '';
 });
-
-// TODO:
-// 1. if public route => dont need auth check
-// 2. if requireLogin => need first 2
-// 3. if requireRole => need all
 
 describe.skip('auth check', () => {
   it('should return error if user is not logged in', async () => {

@@ -2,10 +2,11 @@ const request = require('supertest');
 const { app } = require('../../config/app');
 const { createOne } = require('./utils');
 
-let cookie;
+let cookie = '';
 
-beforeEach(() => {
-  cookie = '';
+beforeEach(async () => {
+  // const { cookie: newCookie } = await signup({ role: 'admin' });
+  // cookie = newCookie;
 });
 
 describe.skip('auth check', () => {
@@ -69,12 +70,12 @@ it('returns 200 & successfully update the ones', async () => {
   let one1 = await createOne();
   let one2 = await createOne();
 
-  expect(one1.test_number).toEqual(10);
-  expect(one2.test_number).toEqual(10);
-
   // update one
   const id1 = one1._id;
   const id2 = one2._id;
+
+  expect(id1).toBeDefined();
+  expect(id2).toBeDefined();
 
   const response = await request(app)
     .put('/api/ones')

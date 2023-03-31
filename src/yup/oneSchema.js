@@ -8,9 +8,9 @@ const oneSchema = object({
     deleteList: objectIdArray,
     updateList: objectIdArray,
     // for testing only
-    test_string: string().max(240),
-    test_number: number().min(0).max(9999),
-    test_any: string().max(240),
+    test_string: string().max(255),
+    test_number: number().min(0).max(1000),
+    test_any: string().max(255),
   }),
   params: reqParams,
   query: reqQuery,

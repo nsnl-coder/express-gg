@@ -1,19 +1,14 @@
 const request = require('supertest');
 const { app } = require('../../config/app');
 
-let cookie;
+let cookie = '';
 
-beforeEach(() => {
-  cookie = '';
+beforeEach(async () => {
+  // const { cookie: newCookie } = await signup({ role: 'admin' });
+  // cookie = newCookie;
 });
 
-// TODO:
-// 1. if public route => dont need auth check
-// 2. if requireLogin => need first 2
-// 3. if requireRole => need all
-
 it('returns 200 & successfully creates one', async () => {
-  // TODO: handle this route
   const { body } = await request(app)
     .post('/api/ones')
     .set('Cookie', cookie)
@@ -26,6 +21,22 @@ it('returns 200 & successfully creates one', async () => {
   expect(body.data.test_string).toBe('testname');
   expect(body.data.test_number).toBe(20);
 });
+
+it.skip.each([['email'], ['password']])(
+  'return error if %s is missing',
+  async (field) => {
+    const { body } = await request(app)
+      .post('/api/ones')
+      .send({
+        // add payload here
+        [field]: undefined,
+      })
+      .expect(400);
+
+    // also check if it return correct message
+    expect(body.errors.includes(`${field} is required`)).toBe(true);
+  },
+);
 
 describe.skip('auth check', () => {
   it('should return error if user is not logged in', async () => {
@@ -69,16 +80,6 @@ describe.skip('auth check', () => {
     expect(response.body.message).toEqual(
       'You do not have permission to perform this action',
     );
-  });
-});
-
-describe.skip('required fields', () => {
-  it('should return error if something is missing', async () => {
-    const response = await request(app)
-      .post('/api/ones')
-      .send({})
-      .set('Cookie', cookie)
-      .expect(400);
   });
 });
 

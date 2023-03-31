@@ -76,7 +76,6 @@ const updateOne = async (req, res, next) => {
   const one = await One.findByIdAndUpdate(req.params.id, body, {
     new: true,
     runValidators: true,
-
   });
 
   if (!one) {
@@ -118,6 +117,13 @@ const updateManyOnes = async (req, res, next) => {
     },
     payload,
   );
+
+  if (modifiedCount !== updateList.length) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Something went wrong!',
+    });
+  }
 
   res.status(200).json({
     status: 'success',
