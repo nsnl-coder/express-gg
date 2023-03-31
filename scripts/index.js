@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+const dotenv = require('dotenv');
+dotenv.config();
 
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
@@ -14,6 +16,7 @@ const {
   getDeleteFilesOptions,
 } = require('./cli');
 const initializeProject = require('./init');
+const { generatePostManFile, deletePostManFile } = require('./postman');
 
 // 0. initalize project
 if (argv._.includes('init')) {
@@ -39,6 +42,7 @@ if (argv.delete || argv.d || argv._.includes('delete')) {
 
   if (deleteCodeFiles) {
     codeFilesHandler.deleteCodeFiles();
+    deletePostManFile(singular);
   }
 
   if (deleteTestFiles) {
@@ -51,6 +55,9 @@ if (argv.delete || argv.d || argv._.includes('delete')) {
 // 5. handle generate file cases
 const includeTestFiles = isIncludeTestFiles();
 codeFilesHandler.generateCodeFiles();
+
+// generate postman file
+generatePostManFile(singular, plural);
 
 if (includeTestFiles) {
   testFilesHandler.generateTestFiles();

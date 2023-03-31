@@ -6,6 +6,7 @@ const {
   getNewFileContent,
   files,
   checkDevDependencies,
+  readPackageJson,
 } = require('./utils');
 
 class TestFilesHandler {
@@ -99,32 +100,11 @@ class TestFilesHandler {
   }
 
   setupTests() {
-    // check for package.json
-    const newPackageJsonBuffer = fs.readFileSync(
-      this.files.newPackageJsonPath,
-      {
-        encoding: 'utf-8',
-      },
-    );
-    let newPackageJsonContent = JSON.parse(newPackageJsonBuffer);
+    const { newPackageJsonContent, onePackageJsonContent } = readPackageJson();
 
-    const onePackageJsonBuffer = fs.readFileSync(
-      this.files.onePackageJsonPath,
-      {
-        encoding: 'utf-8',
-      },
-    );
-    const onePackageJsonContent = JSON.parse(onePackageJsonBuffer);
-
+    // add scripts
     if (!newPackageJsonContent.jest) {
-      newPackageJsonContent.jest = {
-        testEnvironment: 'node',
-        setupFileAfterEnv: ['./src/test/setup.js'],
-      };
-    }
-
-    if (!newPackageJsonContent.scripts) {
-      newPackageJsonContent.scripts = {};
+      newPackageJsonContent.jest = onePackageJsonContent.jest;
     }
 
     if (!newPackageJsonContent.scripts.test) {
@@ -133,6 +113,8 @@ class TestFilesHandler {
         test: 'jest',
       };
     }
+    fs.writeFileSync('./package.json', JSON.stringify(newPackageJsonContent));
+
     // check for setup.js file
     if (!fs.existsSync(this.files.newSetupTestPath)) {
       if (!fs.existsSync('src/test')) fs.mkdirSync('src/test');
@@ -146,7 +128,7 @@ class TestFilesHandler {
       'jest',
       'mongodb-memory-server',
       'nodemon',
-      'supertests',
+      'supertest',
     );
 
     return isMissingDevDependencies;

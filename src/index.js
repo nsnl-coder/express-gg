@@ -5,6 +5,8 @@ const { app } = require('./config/app');
 const db = require('./config/db');
 db();
 
-app.listen(3000, () => {
-  console.log('App running on port 3000...');
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, () => {
+  console.log(`App running on port ${PORT}...`);
 });

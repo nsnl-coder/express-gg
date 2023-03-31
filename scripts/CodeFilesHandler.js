@@ -1,6 +1,6 @@
 const chalk = require('chalk');
 const fs = require('fs');
-const { getNewFileContent, files } = require('./utils');
+const { getNewFileContent, files, insertCode } = require('./utils');
 
 class CodeFilesHandler {
   cwd = process.cwd();
@@ -16,7 +16,7 @@ class CodeFilesHandler {
     const currentPaths = [
       this.files.newControllerPath,
       this.files.newModelPath,
-      this.files.newRouterpath,
+      this.files.newRouterPath,
       this.files.newSchemaPath,
     ];
 
@@ -79,13 +79,20 @@ class CodeFilesHandler {
 
     // routes:
     fs.mkdirSync('./src/routes', { recursive: true });
-    fs.writeFileSync(this.files.newRouterpath, routerFileContent);
+    fs.writeFileSync(this.files.newRouterPath, routerFileContent);
     console.log(chalk.green(`${this.files.routerFilename} created!`));
 
     // schema file
     fs.mkdirSync('./src/yup', { recursive: true });
     fs.writeFileSync(this.files.newSchemaPath, schemaFileContent);
     console.log(chalk.green(`${this.files.schemaFileName} created!`));
+
+    // apply router to express app
+    insertCode(
+      './src/routes/index.js',
+      '#insert__routers',
+      `\nrouter.use("/api/${this.plural}",require("./${this.files.routerFilename}"))`,
+    );
   };
 
   #getNewCodeFilesContent = () => {

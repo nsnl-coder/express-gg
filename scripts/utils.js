@@ -25,13 +25,16 @@ const files = (singular) => {
     //
     newControllerPath: `./src/controllers/${singular}Controller.js`,
     newModelPath: `./src/models/${singular}Model.js`,
-    newRouterpath: `./src/routes/${singular}Routes.js`,
+    newRouterPath: `./src/routes/${singular}Routes.js`,
     newSchemaPath: `./src/yup/${singular}Schema.js`,
     //
     oneSetupTestPath: path.join(__dirname, '..', 'src', 'test', 'setup.js'),
     newSetupTestPath: './src/test/setup.js',
     onePackageJsonPath: path.join(__dirname, '..', 'package.json'),
     newPackageJsonPath: './package.json',
+    //
+    onePostManPath: path.join(__dirname, '..', 'src', 'postman', 'one.json'),
+    newPostManPath: `./src/postman/${singular}.json`,
   };
 };
 
@@ -193,6 +196,28 @@ const getNewFileName = (name, singular, plural) => {
   return name;
 };
 
+const insertCode = (filepath, insertPoint, code) => {
+  const data = fs.readFileSync(filepath, { encoding: 'utf-8' });
+  const newData = data.replace(insertPoint, `${insertPoint}${code}`);
+
+  console.log(chalk.yellow(`${filepath} modified`));
+  fs.writeFileSync(filepath, newData);
+};
+
+const { spawnSync } = require('child_process');
+const isWorkingTreeClean = () => {
+  const result = spawnSync('git', ['status', '--porcelain']);
+  const output = result.stdout.toString().trim();
+
+  if (output) {
+    console.log('Working directory is not clean.');
+  } else {
+    console.log('Working directory is clean.');
+  }
+};
+
+isWorkingTreeClean();
+
 module.exports = {
   files,
   isAtRootFolder,
@@ -201,4 +226,6 @@ module.exports = {
   getNewFileName,
   checkDependencies,
   checkDevDependencies,
+  readPackageJson,
+  insertCode,
 };
