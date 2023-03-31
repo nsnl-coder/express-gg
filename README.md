@@ -76,6 +76,12 @@ When you run `gg` command and select tests, it will check if your project missin
   npm install
 ```
 
+To run test:
+
+```bash
+  npm test
+```
+
 ## Delete Files
 
 if you install the package globally, simply just run express and follow the instruction:
