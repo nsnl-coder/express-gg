@@ -26,7 +26,23 @@ $  gg init
 $  npm start
 ```
 
-## Generate files
+## `gg` command
+
+You can use `gg` command to generate codes.
+
+Before running `gg`, you need to add mongodb connection string to .env file:
+
+```
+  CONNECTION_STRING= <put-your-connection-string-here>
+```
+
+Also, `gg` command only run when your working directory is clean. If your current directory is not a git repo:
+
+```bash
+  $ git init
+  $ git add .
+  $ git commit -m "inital commit"
+```
 
 if you install the package globally, simply just run `gg` and follow the instruction:
 
@@ -38,14 +54,6 @@ Or, if you install it locally:
 
 ```bash
   npx gg
-```
-
-`gg` command only run when your working directory is clean. if your current directory is not a git repo:
-
-```bash
-  $ git init
-  $ git add .
-  $ git commit -m "inital commit"
 ```
 
 ## `gg` command with generate 5 files with sample codes:

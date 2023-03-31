@@ -88,3 +88,7 @@ if (isMissingDependencies || isMissingDevDependencies) {
     '\n',
   );
 }
+
+if (includeTestFiles) {
+  console.log(chalk.green('--> To run tests:'), chalk.blue('npm test'), '\n');
+}
