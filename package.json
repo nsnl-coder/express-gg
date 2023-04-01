@@ -1,6 +1,6 @@
 {
   "name": "express-gg",
-  "version": "1.0.23",
+  "version": "1.0.24",
   "description": "express code generator for controllers, models and routes.",
   "main": "index.js",
   "jest": {
