@@ -9,6 +9,43 @@ beforeEach(async () => {
   // cookie = newCookie;
 });
 
+it('returns 200 & successfully update the ones', async () => {
+  let one1 = await createOne();
+  let one2 = await createOne();
+
+  // update one
+  const id1 = one1._id;
+  const id2 = one2._id;
+
+  expect(id1).toBeDefined();
+  expect(id2).toBeDefined();
+
+  const response = await request(app)
+    .put('/api/ones')
+    .set('Cookie', cookie)
+    .send({
+      updateList: [id1, id2],
+      test_number: 24,
+    })
+    .expect(200);
+
+  expect(response.body.modifiedCount).toEqual(2);
+
+  // double check
+  one1 = await request(app)
+    .get(`/api/ones/${id1}`)
+    .set('Cookie', cookie)
+    .expect(200);
+
+  one2 = await request(app)
+    .get(`/api/ones/${id2}`)
+    .set('Cookie', cookie)
+    .expect(200);
+
+  expect(one1.body.data.test_number).toEqual(24);
+  expect(one2.body.data.test_number).toEqual(24);
+});
+
 describe.skip('auth check', () => {
   it('should return error if user is not logged in', async () => {
     cookie = '';
@@ -54,54 +91,7 @@ describe.skip('auth check', () => {
   });
 });
 
-describe.skip('data validation', () => {
-  it('should return error if validation fail', async () => {
-    const { body } = await request(app)
-      .put('/api/ones')
-      .send({})
-      .set('Cookie', cookie)
-      .expect(400);
-  });
-});
-
 // =====================================================
-
-it('returns 200 & successfully update the ones', async () => {
-  let one1 = await createOne();
-  let one2 = await createOne();
-
-  // update one
-  const id1 = one1._id;
-  const id2 = one2._id;
-
-  expect(id1).toBeDefined();
-  expect(id2).toBeDefined();
-
-  const response = await request(app)
-    .put('/api/ones')
-    .set('Cookie', cookie)
-    .send({
-      updateList: [id1, id2],
-      test_number: 24,
-    })
-    .expect(200);
-
-  expect(response.body.modifiedCount).toEqual(2);
-
-  // double check
-  one1 = await request(app)
-    .get(`/api/ones/${id1}`)
-    .set('Cookie', cookie)
-    .expect(200);
-
-  one2 = await request(app)
-    .get(`/api/ones/${id2}`)
-    .set('Cookie', cookie)
-    .expect(200);
-
-  expect(one1.body.data.test_number).toEqual(24);
-  expect(one2.body.data.test_number).toEqual(24);
-});
 
 it('should return error if updateList contains invalid objectid', async () => {
   const response = await request(app)

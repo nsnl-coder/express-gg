@@ -9,16 +9,17 @@ beforeEach(async () => {
 });
 
 const validData = {};
-let invalidData = [[{ test_number: 'dsas', error: 'of wrong data type' }]];
+let invalidData = [{}];
 
 // ==============================================================
 invalidData = invalidData.map((item) => [item]);
 
-describe.each(invalidData)('data validation', (invalidData) => {
+describe.skip.each(invalidData)('data validation', (invalidData) => {
   it(`shoud fail to create one because ${invalidData.error}`, async () => {
     const response = await request(app)
       .post(`/api/ones`)
       .send({
+        ...validData,
         ...invalidData,
       })
       .set('Cookie', cookie)

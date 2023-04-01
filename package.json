@@ -15,6 +15,7 @@
   "scripts": {
     "update": "npm version patch && npm pub",
     "test": "jest --watch",
+    "testv": "jest --watchAll --no-cache --verbose",
     "start": "node scripts/index.js"
   },
   "keywords": [

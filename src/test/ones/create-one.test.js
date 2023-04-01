@@ -31,6 +31,7 @@ it.skip.each([['email'], ['password']])(
         // add payload here
         [field]: undefined,
       })
+      .set('Cookie', cookie)
       .expect(400);
 
     // also check if it return correct message
@@ -80,15 +81,5 @@ describe.skip('auth check', () => {
     expect(response.body.message).toEqual(
       'You do not have permission to perform this action',
     );
-  });
-});
-
-describe.skip('data validation', () => {
-  it('should return error if validation fail', async () => {
-    const { body } = await request(app)
-      .post('/api/ones')
-      .send({})
-      .set('Cookie', cookie)
-      .expect(400);
   });
 });

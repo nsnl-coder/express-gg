@@ -108,7 +108,7 @@ it('should delete ones if deleteList contains at least an existent objectid', as
   const id = one._id;
   expect(id).toBeDefined();
 
-  // deleteList contain one valid but non-existent objectid
+  // deleteList contain valid but non-existent objectid
   const response = await request(app)
     .delete('/api/ones')
     .set('Cookie', cookie)

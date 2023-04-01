@@ -71,16 +71,6 @@ describe.skip('auth check', () => {
   });
 });
 
-describe.skip('data validation', () => {
-  it('should return error if validation fail', async () => {
-    const { body } = await request(app)
-      .put('/api/ones')
-      .send({})
-      .set('Cookie', cookie)
-      .expect(400);
-  });
-});
-
 // ===========================================
 
 it('should return error if objectid is not valid', async () => {

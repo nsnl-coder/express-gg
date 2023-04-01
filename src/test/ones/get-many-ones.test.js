@@ -152,7 +152,10 @@ describe('itemPerPage & page', () => {
       'query.page must be greater than or equal to 1',
     );
 
-    await request(app).get('/api/ones?page=-4').expect(400);
+    await request(app)
+      .get('/api/ones?page=-4')
+      .set('Cookie', cookie)
+      .expect(400);
   });
 
   it('should return error if itemsPerPage is 0 or negative number', async () => {
@@ -165,7 +168,10 @@ describe('itemPerPage & page', () => {
       'query.itemsPerPage must be greater than or equal to 1',
     );
 
-    await request(app).get('/api/ones?itemsPerPage=-4').expect(400);
+    await request(app)
+      .get('/api/ones?itemsPerPage=-4')
+      .set('Cookie', cookie)
+      .expect(400);
   });
 });
 

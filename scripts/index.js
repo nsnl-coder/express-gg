@@ -89,12 +89,17 @@ let isMissingDependencies = checkDependencies(
 
 if (isMissingDependencies || isMissingDevDependencies) {
   console.log(
-    chalk.green('--> To install missing pakages:'),
+    chalk.green('\n--> To install missing pakages:'),
     chalk.blue('npm install'),
-    '\n',
   );
 }
 
 if (includeTestFiles) {
-  console.log(chalk.green('--> To run tests:'), chalk.blue('npm test'), '\n');
+  console.log(chalk.green('\n--> To run tests:'), chalk.blue('npm test'));
 }
+
+console.log(
+  chalk.green('--> To start project:'),
+  chalk.blue('npm start'),
+  '\n',
+);
