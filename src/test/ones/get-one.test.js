@@ -5,11 +5,11 @@ const { createOne } = require('./utils');
 let cookie = '';
 
 beforeEach(async () => {
-  // const { cookie: newCookie } = await signup({ role: 'admin' });
-  // cookie = newCookie;
+  const { cookie: newCookie } = await signup({ role: 'admin' });
+  cookie = newCookie;
 });
 
-describe.skip('auth check', () => {
+describe('auth check', () => {
   it('should return error if user is not logged in', async () => {
     cookie = '';
     const response = await request(app)

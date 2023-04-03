@@ -5,8 +5,8 @@ const { createOne } = require('./utils');
 let cookie = '';
 
 beforeEach(async () => {
-  // const { cookie: newCookie } = await signup({ role: 'admin' });
-  // cookie = newCookie;
+  const { cookie: newCookie } = await signup({ role: 'admin' });
+  cookie = newCookie;
 
   // create 6 ones
   await createOne({ test_number: 11, test_string: 'a' });
@@ -17,7 +17,7 @@ beforeEach(async () => {
   await createOne({ test_number: 16, test_string: 'b' });
 });
 
-describe.skip('auth check', () => {
+describe('auth check', () => {
   it('should return error if user is not logged in', async () => {
     cookie = '';
     const response = await request(app)

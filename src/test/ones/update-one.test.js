@@ -1,12 +1,12 @@
 const request = require('supertest');
 const { app } = require('../../config/app');
-const { createOne } = require('./utils');
+const { createOne, validOneData } = require('./utils');
 
 let cookie = '';
 
 beforeEach(async () => {
-  // const { cookie: newCookie } = await signup({ role: 'admin' });
-  // cookie = newCookie;
+  const { cookie: newCookie } = await signup({ role: 'admin' });
+  cookie = newCookie;
 });
 
 it('shoud update the one', async () => {
@@ -15,18 +15,14 @@ it('shoud update the one', async () => {
 
   const { body } = await request(app)
     .put(`/api/ones/${one._id}`)
-    .send({
-      test_number: 24,
-      test_string: 'updated',
-    })
+    .send(validOneData)
     .set('Cookie', cookie)
     .expect(200);
 
-  expect(body.data.test_number).toEqual(24);
-  expect(body.data.test_string).toEqual('updated');
+  expect(body.data).toMatchObject(validOneData);
 });
 
-describe.skip('auth check', () => {
+describe('auth check', () => {
   it('should return error if user is not logged in', async () => {
     cookie = '';
     const response = await request(app)

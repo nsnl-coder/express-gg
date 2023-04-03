@@ -1,11 +1,12 @@
 const request = require('supertest');
 const { app } = require('../../config/app');
+const { validOneData } = require('./utils');
 
 let cookie = '';
 
 beforeEach(async () => {
-  // const { cookie: newCookie } = await signup({ role: 'admin' });
-  // cookie = newCookie;
+  const { cookie: newCookie } = await signup({ role: 'admin' });
+  cookie = newCookie;
 });
 
 it('returns 200 & successfully creates one', async () => {
@@ -13,16 +14,14 @@ it('returns 200 & successfully creates one', async () => {
     .post('/api/ones')
     .set('Cookie', cookie)
     .send({
-      test_string: 'testname',
-      test_number: 20,
+      ...validOneData,
     })
     .expect(201);
 
-  expect(body.data.test_string).toBe('testname');
-  expect(body.data.test_number).toBe(20);
+  expect(body.data).toMatchObject(validOneData);
 });
 
-it.skip.each([['email'], ['password']])(
+it.each([['email'], ['password']])(
   'return error if %s is missing',
   async (field) => {
     const { body } = await request(app)
@@ -39,7 +38,7 @@ it.skip.each([['email'], ['password']])(
   },
 );
 
-describe.skip('auth check', () => {
+describe('auth check', () => {
   it('should return error if user is not logged in', async () => {
     cookie = '';
     const response = await request(app)

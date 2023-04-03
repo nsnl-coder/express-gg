@@ -8,5 +8,9 @@
 
 <!-- test file -->
 
-7. if req.body contain objectid, add test to make sure that it will return error
-   if objectid does not exist.
+5. auth check
+6. define valid data with all fields
+7. data validation
+8. checkIdExistence
+9. check for skipped/failed tests
+10. handle side-effect of delete, create

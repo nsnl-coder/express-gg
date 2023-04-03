@@ -74,6 +74,8 @@ const checkDevDependencies = (...devDependencies) => {
   // read package.json
   const { newPackageJsonContent, onePackageJsonContent } = readPackageJson();
 
+  const newPackageJsonContentCopy = newPackageJsonContent;
+
   const newDevDependenciesKeys = Object.keys(
     newPackageJsonContent.devDependencies,
   );
@@ -99,10 +101,12 @@ const checkDevDependencies = (...devDependencies) => {
   }
 
   const filespath = files();
-  fs.writeFileSync(
-    filespath.newPackageJsonPath,
-    JSON.stringify(newPackageJsonContent),
-  );
+  if (newPackageJsonContent !== newPackageJsonContentCopy) {
+    fs.writeFileSync(
+      filespath.newPackageJsonPath,
+      JSON.stringify(newPackageJsonContent),
+    );
+  }
 
   if (isMissingDevDependencies) return true;
 };
@@ -110,6 +114,7 @@ const checkDevDependencies = (...devDependencies) => {
 const checkDependencies = (...dependencies) => {
   // check for package.json
   const { newPackageJsonContent, onePackageJsonContent } = readPackageJson();
+  const newPackageJsonContentCopy = newPackageJsonContent;
 
   // check for script
   if (!newPackageJsonContent.scripts.start) {
@@ -148,10 +153,12 @@ const checkDependencies = (...dependencies) => {
 
   const filespath = files();
 
-  fs.writeFileSync(
-    filespath.newPackageJsonPath,
-    JSON.stringify(newPackageJsonContent),
-  );
+  if (newPackageJsonContent !== newPackageJsonContentCopy) {
+    fs.writeFileSync(
+      filespath.newPackageJsonPath,
+      JSON.stringify(newPackageJsonContent),
+    );
+  }
 
   return isMissingDependencies;
 };

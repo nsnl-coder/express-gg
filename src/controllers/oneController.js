@@ -73,7 +73,7 @@ const updateOne = async (req, res, next) => {
   // TODO: need to destruct this body
   const body = req.body;
 
-  const one = await One.findByIdAndUpdate(req.params.id, body, {
+  const one = await One.findByIdAndUpdate({ _id: req.params.id }, body, {
     new: true,
     runValidators: true,
   });
@@ -116,12 +116,15 @@ const updateManyOnes = async (req, res, next) => {
       },
     },
     payload,
+    {
+      runValidators: true,
+    },
   );
 
   if (modifiedCount !== updateList.length) {
     return res.status(400).json({
-      status: 'fail',
-      message: 'Something went wrong!',
+      status: 'unknown',
+      message: 'your ones may be updated or not!',
     });
   }
 

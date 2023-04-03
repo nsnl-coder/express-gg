@@ -1,12 +1,12 @@
 const request = require('supertest');
 const { app } = require('../../config/app');
-const { createOne } = require('./utils');
+const { createOne, validOneData } = require('./utils');
 
 let cookie = '';
 
 beforeEach(async () => {
-  // const { cookie: newCookie } = await signup({ role: 'admin' });
-  // cookie = newCookie;
+  const { cookie: newCookie } = await signup({ role: 'admin' });
+  cookie = newCookie;
 });
 
 it('returns 200 & successfully update the ones', async () => {
@@ -25,7 +25,7 @@ it('returns 200 & successfully update the ones', async () => {
     .set('Cookie', cookie)
     .send({
       updateList: [id1, id2],
-      test_number: 24,
+      ...validOneData,
     })
     .expect(200);
 
@@ -42,11 +42,11 @@ it('returns 200 & successfully update the ones', async () => {
     .set('Cookie', cookie)
     .expect(200);
 
-  expect(one1.body.data.test_number).toEqual(24);
-  expect(one2.body.data.test_number).toEqual(24);
+  expect(one1.body.data).toMatchObject(validOneData);
+  expect(one2.body.data).toMatchObject(validOneData);
 });
 
-describe.skip('auth check', () => {
+describe('auth check', () => {
   it('should return error if user is not logged in', async () => {
     cookie = '';
     const response = await request(app)
@@ -90,8 +90,6 @@ describe.skip('auth check', () => {
     );
   });
 });
-
-// =====================================================
 
 it('should return error if updateList contains invalid objectid', async () => {
   const response = await request(app)
