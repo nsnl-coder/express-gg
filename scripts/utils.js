@@ -74,7 +74,9 @@ const checkDevDependencies = (...devDependencies) => {
   // read package.json
   const { newPackageJsonContent, onePackageJsonContent } = readPackageJson();
 
-  const newPackageJsonContentCopy = newPackageJsonContent;
+  const newPackageJsonContentCopy = JSON.parse(
+    JSON.stringify(newPackageJsonContent),
+  );
 
   const newDevDependenciesKeys = Object.keys(
     newPackageJsonContent.devDependencies,
@@ -106,6 +108,7 @@ const checkDevDependencies = (...devDependencies) => {
       filespath.newPackageJsonPath,
       JSON.stringify(newPackageJsonContent),
     );
+    console.log('ahahah');
   }
 
   if (isMissingDevDependencies) return true;
@@ -114,7 +117,10 @@ const checkDevDependencies = (...devDependencies) => {
 const checkDependencies = (...dependencies) => {
   // check for package.json
   const { newPackageJsonContent, onePackageJsonContent } = readPackageJson();
-  const newPackageJsonContentCopy = newPackageJsonContent;
+
+  const newPackageJsonContentCopy = JSON.parse(
+    JSON.stringify(newPackageJsonContent),
+  );
 
   // check for script
   if (!newPackageJsonContent.scripts.start) {

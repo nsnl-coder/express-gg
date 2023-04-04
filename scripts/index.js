@@ -12,7 +12,6 @@ const CodeFilesHandler = require('./CodeFilesHandler');
 const {
   isAtRootFolder,
   checkDependencies,
-  isWorkingProcessClean,
   isWorkingDirectoryClean,
 } = require('./utils');
 const {
@@ -22,6 +21,13 @@ const {
 } = require('./cli');
 const initializeProject = require('./init');
 const { generatePostManFile, deletePostManFile } = require('./postman');
+
+//
+if (argv.v || argv.version) {
+  const { onePackageJsonContent } = readPackageJson();
+  console.log(`express version ${onePackageJsonContent.version}`);
+  return;
+}
 
 // 0. initalize project
 if (argv._.includes('init')) {
@@ -85,6 +91,7 @@ let isMissingDependencies = checkDependencies(
   'yup',
   'mongoose',
   'express',
+  'express-common-middlewares',
 );
 
 if (isMissingDependencies || isMissingDevDependencies) {
