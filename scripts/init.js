@@ -34,7 +34,6 @@ const initializeProject = () => {
     'src/middlewares/requireRole.js',
     'src/index.js',
     'src/routes/index.js',
-    './.gitignore',
     './.env',
   ].forEach((pathname) => {
     const onePath = path.join(__dirname, '..', pathname);
@@ -49,6 +48,9 @@ const initializeProject = () => {
       console.log(chalk.red(`${pathname} existed`));
     }
   });
+  // create .gitignore
+  fs.writeFileSync('./.gitignore', 'node_modules');
+
   // handle app.js
   const appContent = fs.readFileSync(
     path.join(__dirname, '..', 'src', 'config', 'app2.js'),
