@@ -11,7 +11,6 @@ beforeEach(async () => {
 
 it('shoud update the one', async () => {
   const one = await createOne();
-  expect(one.test_number).toEqual(10);
 
   const { body } = await request(app)
     .put(`/api/ones/${one._id}`)

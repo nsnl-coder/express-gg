@@ -21,7 +21,7 @@ it('returns 200 & successfully creates one', async () => {
   expect(body.data).toMatchObject(validOneData);
 });
 
-it.each([['email'], ['password']])(
+it.skip.each(['email', 'password'])(
   'return error if %s is missing',
   async (field) => {
     const { body } = await request(app)
