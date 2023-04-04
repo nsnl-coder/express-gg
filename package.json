@@ -1,6 +1,6 @@
 {
   "name": "express-gg",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "description": "express code generator for controllers, models and routes.",
   "main": "index.js",
   "jest": {
@@ -9,9 +9,6 @@
       "./src/test/setup.js"
     ]
   },
-  "files": [
-    ".gitignore"
-  ],
   "bin": {
     "gg": "./scripts/index.js"
   },
