@@ -14,7 +14,6 @@ const {
   isAtRootFolder,
   checkDependencies,
   isWorkingDirectoryClean,
-  readPackageJson,
   files,
 } = require('./utils');
 const {
