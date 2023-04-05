@@ -6,6 +6,7 @@ const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const argv = yargs(hideBin(process.argv)).argv;
 const chalk = require('chalk');
+const fs = require('fs');
 //
 const TestFilesHandler = require('./TestFilesHandler');
 const CodeFilesHandler = require('./CodeFilesHandler');
@@ -14,6 +15,7 @@ const {
   checkDependencies,
   isWorkingDirectoryClean,
   readPackageJson,
+  files,
 } = require('./utils');
 const {
   getAndValidateUserInput,
@@ -22,11 +24,10 @@ const {
 } = require('./cli');
 const initializeProject = require('./init');
 const { generatePostManFile, deletePostManFile } = require('./postman');
-
 //
 if (argv.v || argv.version) {
-  const { onePackageJsonContent } = readPackageJson();
-  console.log(`express version ${onePackageJsonContent.version}`);
+  const onePackageJsonContent = fs.readFileSync(files().onePackageJsonPath);
+  console.log(`express version ${JSON.parse(onePackageJsonContent).version}`);
   return;
 }
 
