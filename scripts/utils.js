@@ -108,7 +108,6 @@ const checkDevDependencies = (...devDependencies) => {
       filespath.newPackageJsonPath,
       JSON.stringify(newPackageJsonContent),
     );
-    console.log('ahahah');
   }
 
   if (isMissingDevDependencies) return true;
