@@ -13,6 +13,7 @@ const {
   isAtRootFolder,
   checkDependencies,
   isWorkingDirectoryClean,
+  readPackageJson,
 } = require('./utils');
 const {
   getAndValidateUserInput,
