@@ -26,7 +26,7 @@ const { generatePostManFile, deletePostManFile } = require('./postman');
 //
 if (argv.v || argv.version) {
   const onePackageJsonContent = fs.readFileSync(files().onePackageJsonPath);
-  console.log(`express version ${JSON.parse(onePackageJsonContent).version}`);
+  console.log(`gg version ${JSON.parse(onePackageJsonContent).version}`);
   return;
 }
 

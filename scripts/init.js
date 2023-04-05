@@ -28,21 +28,25 @@ const initializeProject = () => {
   console.log(chalk.blue('\nGenerating files.....'));
 
   // create necessary file
-  ['src/config/db.js', 'src/index.js', 'src/routes/index.js', './.env'].forEach(
-    (pathname) => {
-      const onePath = path.join(__dirname, '..', pathname);
-      const newPath = pathname;
+  [
+    'src/config/db.js',
+    'src/index.js',
+    'src/routes/index.js',
+    'src/models/userModel.js',
+    './.env',
+  ].forEach((pathname) => {
+    const onePath = path.join(__dirname, '..', pathname);
+    const newPath = pathname;
 
-      const oneContent = fs.readFileSync(onePath, { encoding: 'utf-8' });
+    const oneContent = fs.readFileSync(onePath, { encoding: 'utf-8' });
 
-      if (!fs.existsSync(newPath)) {
-        fs.writeFileSync(newPath, oneContent);
-        console.log(chalk.green(`${pathname} created`));
-      } else {
-        console.log(chalk.red(`${pathname} existed`));
-      }
-    },
-  );
+    if (!fs.existsSync(newPath)) {
+      fs.writeFileSync(newPath, oneContent);
+      console.log(chalk.green(`${pathname} created`));
+    } else {
+      console.log(chalk.red(`${pathname} existed`));
+    }
+  });
   // create .gitignore
   fs.writeFileSync('./.gitignore', 'node_modules\n.env');
 
