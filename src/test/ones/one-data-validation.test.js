@@ -9,13 +9,18 @@ beforeEach(async () => {
 });
 
 let invalidData = [
-  { field: 'test_number', message: 'wrong data type', test_number: 'sss' },
+  {
+    field: 'test_number',
+    message:
+      'test_number must be a `number` type, but the final value was: `NaN` (cast from the value `"sss"`).',
+    test_number: 'sss',
+  },
 ];
 
 // ==============================================================
 describe.each(invalidData)(
   'invalid $field',
-  ({ field, message, ...invalidData }) => {
+  ({ field, message, _note, ...invalidData }) => {
     it(`shoud fail to create one because ${message}`, async () => {
       const response = await request(app)
         .post(`/api/ones`)
@@ -27,6 +32,7 @@ describe.each(invalidData)(
         .expect(400);
 
       expect(response.body.message).toEqual('Data validation failed');
+      expect(response.body.errors).toContain(message);
     });
 
     it(`should fail to update one because ${message}`, async () => {
@@ -41,6 +47,7 @@ describe.each(invalidData)(
         .expect(400);
 
       expect(response.body.message).toEqual('Data validation failed');
+      expect(response.body.errors).toContain(message);
     });
 
     it(`shoud fail to update many ones because ${message}`, async () => {
@@ -58,6 +65,7 @@ describe.each(invalidData)(
         .expect(400);
 
       expect(response.body.message).toEqual('Data validation failed');
+      expect(response.body.errors).toContain(message);
     });
   },
 );

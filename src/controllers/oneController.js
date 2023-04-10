@@ -28,7 +28,7 @@ const getManyOnes = async (req, res, next) => {
     fields,
     sort = '-createdAt', // new to old
     page = 1,
-    itemsPerPage = 20,
+    itemsPerPage = 10,
     filter,
   } = req.query;
 
@@ -64,9 +64,16 @@ const getManyOnes = async (req, res, next) => {
   // 5. finally await query
   const ones = await query;
 
-  res
-    .status(200)
-    .json({ status: 'success', totalPages, results: ones.length, data: ones });
+  res.status(200).json({
+    status: 'success',
+    data: ones,
+    pagination: {
+      currentPages: page,
+      results: ones.length,
+      totalPages,
+      totalResults: matchingResults,
+    },
+  });
 };
 
 const updateOne = async (req, res, next) => {
