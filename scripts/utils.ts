@@ -7,29 +7,29 @@ const cwd = process.cwd();
 const files = (singular?: string) => {
   return {
     //
-    controllerFileName: `${singular}Controller.js`,
-    modelFileName: `${singular}Model.js`,
-    routerFilename: `${singular}Routes.js`,
-    schemaFileName: `${singular}Schema.js`,
+    controllerFileName: `${singular}Controller.ts`,
+    modelFileName: `${singular}Model.ts`,
+    routerFilename: `${singular}Routes.ts`,
+    schemaFileName: `${singular}Schema.ts`,
     //
     oneControllerPath: path.join(
       __dirname,
       '..',
       'src',
       'controllers',
-      'oneController.js',
+      'oneController.ts',
     ),
-    oneModelPath: path.join(__dirname, '..', 'src', 'models', 'oneModel.js'),
-    oneRoutesPath: path.join(__dirname, '..', 'src', 'routes', 'oneRoutes.js'),
-    oneSchemaPath: path.join(__dirname, '..', 'src', 'yup', 'oneSchema.js'),
+    oneModelPath: path.join(__dirname, '..', 'src', 'models', 'oneModel.ts'),
+    oneRoutesPath: path.join(__dirname, '..', 'src', 'routes', 'oneRouter.ts'),
+    oneSchemaPath: path.join(__dirname, '..', 'src', 'yup', 'oneSchema.ts'),
     //
-    newControllerPath: `./src/controllers/${singular}Controller.js`,
-    newModelPath: `./src/models/${singular}Model.js`,
-    newRouterPath: `./src/routes/${singular}Routes.js`,
-    newSchemaPath: `./src/yup/${singular}Schema.js`,
+    newControllerPath: `./src/controllers/${singular}Controller.ts`,
+    newModelPath: `./src/models/${singular}Model.ts`,
+    newRouterPath: `./src/routes/${singular}Routes.ts`,
+    newSchemaPath: `./src/yup/${singular}Schema.ts`,
     //
-    oneSetupTestPath: path.join(__dirname, '..', 'src', 'test', 'setup.js'),
-    newSetupTestPath: './src/test/setup.js',
+    oneSetupTestPath: path.join(__dirname, '..', 'src', 'test', 'setup.ts'),
+    newSetupTestPath: './src/test/setup.ts',
     onePackageJsonPath: path.join(__dirname, '..', 'package.json'),
     newPackageJsonPath: './package.json',
     //
@@ -123,7 +123,7 @@ const checkDependencies = (...dependencies: string[]) => {
 
   // check for script
   if (!newPackageJsonContent.scripts.start) {
-    newPackageJsonContent.scripts.start = 'nodemon src/index.js';
+    newPackageJsonContent.scripts.start = 'ts-node src/index.ts';
   }
 
   const newDependenciesKeys = Object.keys(newPackageJsonContent.dependencies);

@@ -120,12 +120,12 @@ class TestFilesHandler {
     }
     fs.writeFileSync('./package.json', JSON.stringify(newPackageJsonContent));
 
-    // check for setup.js file
+    // check for setup.ts file
     if (!fs.existsSync(this.files.newSetupTestPath)) {
       if (!fs.existsSync('src/test')) fs.mkdirSync('src/test');
       const oneSetupFileContent = fs.readFileSync(this.files.oneSetupTestPath);
       fs.writeFileSync(this.files.newSetupTestPath, oneSetupFileContent);
-      console.log(chalk.blue('src/test/setup.js file created'));
+      console.log(chalk.blue('src/test/setup.ts file created'));
     }
 
     // check for dev dependencies

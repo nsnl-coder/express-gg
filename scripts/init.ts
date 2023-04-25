@@ -29,10 +29,10 @@ const initializeProject = () => {
 
   // create necessary file
   [
-    'src/config/db.js',
-    'src/index.js',
-    'src/routes/index.js',
-    'src/models/userModel.js',
+    'src/config/db.ts',
+    'src/index.ts',
+    'src/routes/index.ts',
+    'src/models/userModel.ts',
     './.env',
   ].forEach((pathname) => {
     const onePath = path.join(__dirname, '..', pathname);
@@ -50,16 +50,16 @@ const initializeProject = () => {
   // create .gitignore
   fs.writeFileSync('./.gitignore', 'node_modules\n.env');
 
-  // handle app.js
+  // handle app.ts
   const appContent = fs.readFileSync(
-    path.join(__dirname, '..', 'src', 'config', 'app2.js'),
+    path.join(__dirname, '..', 'src', 'config', 'app2.ts'),
     {
       encoding: 'utf-8',
     },
   );
 
-  if (!fs.existsSync('./src/config/app.js')) {
-    fs.writeFileSync('./src/config/app.js', appContent);
+  if (!fs.existsSync('./src/config/app.ts')) {
+    fs.writeFileSync('./src/config/app.ts', appContent);
   }
 
   // check for miss depen

@@ -99,9 +99,9 @@ class CodeFilesHandler {
 
     // apply router to express app
     insertCode(
-      './src/routes/index.js',
+      './src/routes/index.ts',
       '#insert__routers',
-      `\nimport ${this.singular}Router from './${this.singular}Router';\nrouter.use(${this.singular}Router)"))`,
+      `\nimport ${this.singular}Router from './${this.singular}Router';\nrouter.use(${this.singular}Router);`,
     );
   };
 
