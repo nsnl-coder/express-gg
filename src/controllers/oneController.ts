@@ -1,14 +1,15 @@
-const { One } = require('../models/oneModel');
+import { NextFunction, Request, Response } from 'express';
+import { One } from '../models/oneModel';
+import { IOne } from '../yup/oneSchema';
 
-const createOne = async (req, res, next) => {
-  // TODO: need to parse body
+const createOne = async (req: Request, res: Response, next: NextFunction) => {
   const body = req.body;
   const one = await One.create(body);
   res.status(201).json({ status: 'success', data: one });
 };
 
-const getOne = async (req, res, next) => {
-  const one = await One.findById(req.params.id);
+const getOne = async (req: Request, res: Response, next: NextFunction) => {
+  const one: IOne | null = await One.findById(req.params.id);
 
   if (!one) {
     return res.status(404).json({
@@ -23,7 +24,7 @@ const getOne = async (req, res, next) => {
   });
 };
 
-const getManyOnes = async (req, res, next) => {
+const getManyOnes = async (req: Request, res: Response, next: NextFunction) => {
   const {
     fields,
     sort = '-createdAt', // new to old
@@ -36,11 +37,19 @@ const getManyOnes = async (req, res, next) => {
   const matchingResults = await One.countDocuments(filter);
   const totalPages = Math.ceil(matchingResults / itemsPerPage);
 
+  const pagination = {
+    currentPages: page,
+    results: 0,
+    totalPages,
+    totalResults: matchingResults,
+    currentPage: page,
+    itemsPerPage,
+  };
+
   if (page > totalPages) {
     return res.status(200).json({
       status: 'success',
-      results: 0,
-      data: [],
+      pagination,
     });
   }
 
@@ -68,24 +77,21 @@ const getManyOnes = async (req, res, next) => {
     status: 'success',
     data: ones,
     pagination: {
-      currentPages: page,
+      ...pagination,
       results: ones.length,
-      totalPages,
-      totalResults: matchingResults,
     },
   });
 };
 
-const updateOne = async (req, res, next) => {
-  // TODO: need to destruct this body
-  const body = req.body;
+const updateOne = async (req: Request, res: Response, next: NextFunction) => {
+  const one: IOne = req.body;
 
-  const one = await One.findByIdAndUpdate({ _id: req.params.id }, body, {
+  const updatedOne = await One.findByIdAndUpdate({ _id: req.params.id }, one, {
     new: true,
     runValidators: true,
   });
 
-  if (!one) {
+  if (!updatedOne) {
     return res.status(404).json({
       status: 'fail',
       message: 'Can not find one with provided id',
@@ -94,13 +100,19 @@ const updateOne = async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    data: one,
+    data: updatedOne,
   });
 };
 
-const updateManyOnes = async (req, res, next) => {
-  // TODO: need to destruct payload
+const updateManyOnes = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { updateList, ...payload } = req.body;
+
+  // TODO: need to destruct one
+  const one = payload as IOne;
 
   // check if ids in updateList all exist
   const matchedDocuments = await One.countDocuments({
@@ -122,26 +134,21 @@ const updateManyOnes = async (req, res, next) => {
         $in: updateList,
       },
     },
-    payload,
+    one,
     {
       runValidators: true,
     },
   );
 
-  if (modifiedCount !== updateList.length) {
-    return res.status(400).json({
-      status: 'unknown',
-      message: 'your ones may be updated or not!',
-    });
-  }
-
   res.status(200).json({
     status: 'success',
-    modifiedCount,
+    data: {
+      modifiedCount,
+    },
   });
 };
 
-const deleteOne = async (req, res, next) => {
+const deleteOne = async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
 
   const one = await One.findByIdAndDelete(id);
@@ -155,11 +162,15 @@ const deleteOne = async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    messaage: 'you successfully delete your one',
+    message: 'you successfully delete your one',
   });
 };
 
-const deleteManyOnes = async (req, res, next) => {
+const deleteManyOnes = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const deleteList = req.body.deleteList;
 
   const { deletedCount } = await One.deleteMany({
@@ -178,11 +189,13 @@ const deleteManyOnes = async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     message: 'Successfully deleted ones',
-    deletedCount,
+    data: {
+      deletedCount,
+    },
   });
 };
 
-module.exports = {
+export {
   createOne,
   getOne,
   getManyOnes,

@@ -1,48 +1,32 @@
-const request = require('supertest');
-const { app } = require('../../config/app');
-const { validOneData } = require('./utils');
+import request from 'supertest';
+import { app } from '../../config/app';
+import { createOne, validOneData } from './utils';
+import { signup } from '../setup';
 
-let cookie = '';
+let cookie: string[] = [];
 
 beforeEach(async () => {
   const { cookie: newCookie } = await signup({ role: 'admin' });
   cookie = newCookie;
 });
 
-it('returns 200 & successfully creates one', async () => {
+it('shoud update the one', async () => {
+  const one = await createOne();
+
   const { body } = await request(app)
-    .post('/api/ones')
+    .put(`/api/ones/${one._id}`)
+    .send(validOneData)
     .set('Cookie', cookie)
-    .send({
-      ...validOneData,
-    })
-    .expect(201);
+    .expect(200);
 
   expect(body.data).toMatchObject(validOneData);
 });
 
-it.skip.each(['email', 'password'])(
-  'return error if %s is missing',
-  async (field) => {
-    const { body } = await request(app)
-      .post('/api/ones')
-      .send({
-        // add payload here
-        [field]: undefined,
-      })
-      .set('Cookie', cookie)
-      .expect(400);
-
-    // also check if it return correct message
-    expect(body.errors).toContain(`${field} is required`);
-  },
-);
-
 describe('auth check', () => {
   it('should return error if user is not logged in', async () => {
-    cookie = '';
+    cookie = [];
     const response = await request(app)
-      .post('/api/ones')
+      .put('/api/ones/some-id')
       .set('Cookie', cookie)
       .expect(401);
 
@@ -58,7 +42,7 @@ describe('auth check', () => {
     });
 
     const response = await request(app)
-      .post('/api/ones')
+      .put('/api/ones/some-id')
       .set('Cookie', cookie)
       .expect(401);
 
@@ -73,7 +57,7 @@ describe('auth check', () => {
     });
 
     const response = await request(app)
-      .post('/api/ones')
+      .put('/api/ones/some-id')
       .set('Cookie', cookie)
       .expect(403);
 
@@ -81,4 +65,31 @@ describe('auth check', () => {
       'You do not have permission to perform this action',
     );
   });
+});
+
+// ===========================================
+
+it('should return error if objectid is not valid', async () => {
+  const { body } = await request(app)
+    .put('/api/ones/not-valid-objectid')
+    .send({
+      test_number: 24,
+    })
+    .set('Cookie', cookie)
+    .expect(400);
+
+  expect(body.message).toEqual('Data validation failed');
+  expect(body.errors).toContain('Invalid ObjectId');
+});
+
+it('should return error if objectid does not exist in db', async () => {
+  const { body } = await request(app)
+    .put('/api/ones/00000020f51bb4362eee2a4d')
+    .send({
+      test_number: 24,
+    })
+    .set('Cookie', cookie)
+    .expect(404);
+
+  expect(body.message).toEqual('Can not find one with provided id');
 });

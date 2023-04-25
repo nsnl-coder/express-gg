@@ -1,10 +1,10 @@
-const express = require('express');
-const { validateRequest, requiredFields } = require('yup-schemas');
-const { requireLogin, requireRole } = require('express-common-middlewares');
+import express from 'express';
+import { validateRequest, requiredFields } from 'yup-schemas';
+import { requireLogin, requireRole } from 'express-common-middlewares';
 //
-const oneSchema = require('../yup/oneSchema');
-const oneController = require('../controllers/oneController');
-const { User } = require('../models/userModel');
+import oneSchema from '../yup/oneSchema';
+import * as oneController from '../controllers/oneController';
+import { User } from '../models/userModel';
 
 const router = express.Router();
 
@@ -29,4 +29,4 @@ router.put('/', validateRequest(oneSchema), oneController.updateManyOnes);
 router.delete('/:id', validateRequest(oneSchema), oneController.deleteOne);
 router.delete('/', validateRequest(oneSchema), oneController.deleteManyOnes);
 
-module.exports = router;
+export default router;

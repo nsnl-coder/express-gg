@@ -1,9 +1,9 @@
-const { MongoMemoryServer } = require('mongodb-memory-server');
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const { User } = require('../models/userModel');
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
+import { User } from '../models/userModel';
 
-let mongo;
+let mongo: any;
 
 // function that run before all of tests
 beforeAll(async () => {
@@ -36,17 +36,22 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-const signJwtToken = (id) => {
+const signJwtToken = (id: string) => {
+  if (!process.env.JWT_SECRET) {
+    console.log('Can not find secret');
+    return;
+  }
+
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
 
-const jwt2Cookie = (jwt) => {
+const jwt2Cookie = (jwt: any) => {
   return [`jwt=${jwt}; Path=/; HttpOnly`];
 };
 
-global.signup = async (payload) => {
+const signup = async (payload: any) => {
   const user = await User.create({
     email: 'test@test.com',
     isVerified: true,
@@ -54,8 +59,10 @@ global.signup = async (payload) => {
     ...payload,
   });
 
-  const jwt = signJwtToken(user._id);
+  const jwt = signJwtToken(user._id.toString());
   const cookie = jwt2Cookie(jwt);
 
   return { cookie };
 };
+
+export { signup, jwt2Cookie };

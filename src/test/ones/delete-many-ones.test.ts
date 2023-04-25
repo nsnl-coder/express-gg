@@ -1,8 +1,8 @@
-const request = require('supertest');
-const { app } = require('../../config/app');
-const { createOne } = require('./utils');
-
-let cookie = '';
+import request from 'supertest';
+import { app } from '../../config/app';
+import { createOne } from './utils';
+import { signup } from '../setup';
+let cookie: string[] = [];
 
 beforeEach(async () => {
   const { cookie: newCookie } = await signup({ role: 'admin' });
@@ -11,7 +11,7 @@ beforeEach(async () => {
 
 describe('auth check', () => {
   it('should return error if user is not logged in', async () => {
-    cookie = '';
+    cookie = [];
     const response = await request(app)
       .delete('/api/ones')
       .set('Cookie', cookie)
@@ -76,7 +76,7 @@ it('should delete many ones', async () => {
     })
     .expect(200);
 
-  expect(response.body.deletedCount).toEqual(2);
+  expect(response.body.data.deletedCount).toEqual(2);
 });
 
 it('should return error if deleteList only contains invalid ObjectId', async () => {
@@ -117,5 +117,5 @@ it('should delete ones if deleteList contains at least an existent objectid', as
     })
     .expect(200);
 
-  expect(response.body.deletedCount).toEqual(1);
+  expect(response.body.data.deletedCount).toEqual(1);
 });

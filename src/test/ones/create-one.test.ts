@@ -1,19 +1,48 @@
-const request = require('supertest');
-const { app } = require('../../config/app');
-const { createOne } = require('./utils');
-
-let cookie = '';
+import request from 'supertest';
+import { app } from '../../config/app';
+import { validOneData } from './utils';
+import { signup } from '../setup';
+let cookie: string[] = [];
 
 beforeEach(async () => {
   const { cookie: newCookie } = await signup({ role: 'admin' });
   cookie = newCookie;
 });
 
+it('returns 200 & successfully creates one', async () => {
+  const { body } = await request(app)
+    .post('/api/ones')
+    .set('Cookie', cookie)
+    .send({
+      ...validOneData,
+    })
+    .expect(201);
+
+  expect(body.data).toMatchObject(validOneData);
+});
+
+it.skip.each(['email', 'password'])(
+  'return error if %s is missing',
+  async (field) => {
+    const { body } = await request(app)
+      .post('/api/ones')
+      .send({
+        // add payload here
+        [field]: undefined,
+      })
+      .set('Cookie', cookie)
+      .expect(400);
+
+    // also check if it return correct message
+    expect(body.errors).toContain(`${field} is required`);
+  },
+);
+
 describe('auth check', () => {
   it('should return error if user is not logged in', async () => {
-    cookie = '';
+    cookie = [];
     const response = await request(app)
-      .get('/api/ones/some-id')
+      .post('/api/ones')
       .set('Cookie', cookie)
       .expect(401);
 
@@ -29,7 +58,7 @@ describe('auth check', () => {
     });
 
     const response = await request(app)
-      .get('/api/ones/some-id')
+      .post('/api/ones')
       .set('Cookie', cookie)
       .expect(401);
 
@@ -44,7 +73,7 @@ describe('auth check', () => {
     });
 
     const response = await request(app)
-      .get('/api/ones/some-id')
+      .post('/api/ones')
       .set('Cookie', cookie)
       .expect(403);
 
@@ -52,34 +81,4 @@ describe('auth check', () => {
       'You do not have permission to perform this action',
     );
   });
-});
-
-// ===================================================
-
-it('returns 200 & successfully receives requested one', async () => {
-  const one = await createOne();
-  const response = await request(app)
-    .get(`/api/ones/${one._id}`)
-    .set('Cookie', cookie)
-    .expect(200);
-
-  expect(response.body.data._id).toEqual(one._id);
-});
-
-it('should return error if objectid is not valid objectid', async () => {
-  const response = await request(app)
-    .get(`/api/ones/12345678900`)
-    .set('Cookie', cookie)
-    .expect(400);
-
-  expect(response.body.errors).toContain('Invalid ObjectId');
-});
-
-it('should return error if objectid is not existed', async () => {
-  const response = await request(app)
-    .get(`/api/ones/507f1f77bcf86cd799439011`)
-    .set('Cookie', cookie)
-    .expect(404);
-
-  expect(response.body.message).toEqual('Can not find one with provided id');
 });

@@ -1,8 +1,9 @@
-const request = require('supertest');
-const { app } = require('../../config/app');
-const { createOne, validOneData } = require('./utils');
+import request from 'supertest';
+import { app } from '../../config/app';
+import { createOne, validOneData } from './utils';
+import { signup } from '../setup';
 
-let cookie = '';
+let cookie: string[] = [];
 
 beforeEach(async () => {
   const { cookie: newCookie } = await signup({ role: 'admin' });
@@ -29,26 +30,26 @@ it('returns 200 & successfully update the ones', async () => {
     })
     .expect(200);
 
-  expect(response.body.modifiedCount).toEqual(2);
+  expect(response.body.data.modifiedCount).toEqual(2);
 
   // double check
-  one1 = await request(app)
+  const updatedOne1 = await request(app)
     .get(`/api/ones/${id1}`)
     .set('Cookie', cookie)
     .expect(200);
 
-  one2 = await request(app)
+  const updatedOne2 = await request(app)
     .get(`/api/ones/${id2}`)
     .set('Cookie', cookie)
     .expect(200);
 
-  expect(one1.body.data).toMatchObject(validOneData);
-  expect(one2.body.data).toMatchObject(validOneData);
+  expect(updatedOne1.body.data).toMatchObject(validOneData);
+  expect(updatedOne2.body.data).toMatchObject(validOneData);
 });
 
 describe('auth check', () => {
   it('should return error if user is not logged in', async () => {
-    cookie = '';
+    cookie = [];
     const response = await request(app)
       .put('/api/ones')
       .set('Cookie', cookie)

@@ -1,8 +1,9 @@
-const request = require('supertest');
-const { createOne, validOneData } = require('./utils');
-const { app } = require('../../config/app');
+import request from 'supertest';
+import { createOne, validOneData } from './utils';
+import { app } from '../../config/app';
+import { signup } from '../setup';
+let cookie: string[] = [];
 
-let cookie = '';
 beforeEach(async () => {
   const { cookie: newCookie } = await signup({ role: 'admin' });
   cookie = newCookie;
@@ -20,7 +21,7 @@ let invalidData = [
 // ==============================================================
 describe.each(invalidData)(
   'invalid $field',
-  ({ field, message, _note, ...invalidData }) => {
+  ({ field, message, ...invalidData }) => {
     it(`shoud fail to create one because ${message}`, async () => {
       const response = await request(app)
         .post(`/api/ones`)

@@ -1,10 +1,10 @@
-const express = require('express');
+import express from 'express';
 
 const router = express.Router();
 
 // #insert__routers
 
-router.use('/', (req, res, next) => {
+router.use('/', (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({
     status: 'success',
     message:
@@ -12,4 +12,4 @@ router.use('/', (req, res, next) => {
   });
 });
 
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const db = () => {
   if (!process.env.CONNECTION_STRING) {
@@ -6,10 +6,7 @@ const db = () => {
   }
 
   mongoose
-    .connect(process.env.CONNECTION_STRING, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
+    .connect(process.env.CONNECTION_STRING)
     .then(() => {
       console.log('Mongodb Database Connected');
     })
@@ -18,4 +15,4 @@ const db = () => {
     });
 };
 
-module.exports = db;
+export default db;
