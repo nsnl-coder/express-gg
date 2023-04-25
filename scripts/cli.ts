@@ -17,14 +17,6 @@ const getDeleteFilesOptions = () => {
 };
 
 const getAndValidateUserInput = () => {
-  if (!process.env.CONNECTION_STRING) {
-    return console.log(
-      chalk.red(
-        'You need to add CONNECTION_STRING to your .env file to continue.',
-      ),
-    );
-  }
-
   let singular: string | false = prompt('Singular form of your resource? ');
   singular = isValidResourceName(singular);
 
