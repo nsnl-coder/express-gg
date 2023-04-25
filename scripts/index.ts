@@ -37,15 +37,18 @@ function main() {
   if (argv instanceof Promise) return;
 
   if (argv.v || argv.version) {
-    const onePackageJsonContent = fs.readFileSync(files().onePackageJsonPath);
-    console.log(
-      `gg version ${JSON.parse(JSON.stringify(onePackageJsonContent)).version}`,
-    );
+    const onePackageJsonContent = fs.readFileSync(files().onePackageJsonPath, {
+      encoding: 'utf-8',
+    });
+
+    console.log(`gg version ${JSON.parse(onePackageJsonContent).version}`);
+    return;
   }
 
   // 0. initalize project
   if (argv._.includes('init')) {
     initializeProject();
+    return;
   }
 
   if (
