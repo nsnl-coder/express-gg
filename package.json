@@ -2,7 +2,7 @@
   "name": "express-gg",
   "version": "2.0.4",
   "description": "express code generator for controllers, models and routes.",
-  "main": "index.js",
+  "main": "build/index.js",
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
@@ -10,6 +10,10 @@
       "./src/test/setup.ts"
     ]
   },
+  "types": "./build/index.d.ts",
+  "files": [
+    "./build/**/*"
+  ],
   "bin": {
     "gg": "./scripts/index.js"
   },
@@ -17,7 +21,8 @@
     "update": "npm version patch && npm pub",
     "test": "jest --watch",
     "testv": "jest --watchAll --no-cache --verbose",
-    "start": "node scripts/index.js"
+    "start": "node scripts/index.js",
+    "build": "del build && tsc"
   },
   "keywords": [
     "yup",
@@ -49,6 +54,8 @@
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.1",
     "@types/jsonwebtoken": "^9.0.1",
+    "@types/prompt-sync": "^4.2.0",
+    "del-cli": "^5.0.0",
     "jest": "^29.5.0",
     "mongodb-memory-server": "^8.12.1",
     "nodemon": "^2.0.22",
