@@ -15,7 +15,7 @@
     "./build/**/*"
   ],
   "bin": {
-    "gg": "./scripts/index.js"
+    "gg": "./build/index.js"
   },
   "scripts": {
     "update": "npm version patch && npm pub",
