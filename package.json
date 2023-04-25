@@ -1,6 +1,6 @@
 {
   "name": "express-gg",
-  "version": "2.0.6",
+  "version": "2.1.0",
   "description": "express code generator for controllers, models and routers.",
   "main": "build/index.js",
   "jest": {
@@ -12,7 +12,8 @@
   },
   "types": "./build/index.d.ts",
   "files": [
-    "./build/**/*"
+    "./build/**/*",
+    "./src"
   ],
   "bin": {
     "gg": "./build/index.js"
