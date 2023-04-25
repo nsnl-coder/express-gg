@@ -19,7 +19,7 @@
     "gg": "./build/index.js"
   },
   "scripts": {
-    "update": "npm version patch && npm pub",
+    "pub": "del build && tsc && npm version patch && npm pub",
     "test": "jest --watch",
     "testv": "jest --watchAll --no-cache --verbose",
     "start": "ts-node src/index.js",
