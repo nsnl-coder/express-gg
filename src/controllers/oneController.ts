@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { One } from '../models/oneModel';
 import { IOne } from '../yup/oneSchema';
+import { ReqQuery } from '../types/express';
 
 const createOne = async (req: Request, res: Response, next: NextFunction) => {
   const body = req.body;
@@ -31,7 +32,7 @@ const getManyOnes = async (req: Request, res: Response, next: NextFunction) => {
     page = 1,
     itemsPerPage = 10,
     filter,
-  } = req.query;
+  } = req.query as ReqQuery;
 
   // 0. check how many result
   const matchingResults = await One.countDocuments(filter);

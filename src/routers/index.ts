@@ -1,8 +1,11 @@
 import express, { NextFunction, Request, Response } from 'express';
+// #insert__routers
+import oneRouter from './oneRouter';
 
 const router = express.Router();
 
-// #insert__routers
+// #use__routers
+router.use('/api/ones', oneRouter);
 
 router.use('/', (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({

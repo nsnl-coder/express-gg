@@ -101,7 +101,13 @@ class CodeFilesHandler {
     insertCode(
       './src/routers/index.ts',
       '#insert__routers',
-      `\nimport ${this.singular}Router from './${this.singular}Router';\nrouter.use(${this.singular}Router);`,
+      `\nimport ${this.singular}Router from './${this.singular}Router';`,
+    );
+
+    insertCode(
+      './src/routers/index.ts',
+      '#use__routers',
+      `\nrouter.use('/api/${this.plural}',${this.singular}Router);`,
     );
   };
 

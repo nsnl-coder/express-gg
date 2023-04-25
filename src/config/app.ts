@@ -2,11 +2,11 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 
 const app = express();
-import oneRouter from '../routers/oneRouter';
+import indexRouter from '../routers/index';
 
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/api/ones', oneRouter);
+app.use('/', indexRouter);
 
 export { app };
