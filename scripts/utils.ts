@@ -9,7 +9,7 @@ const files = (singular?: string) => {
     //
     controllerFileName: `${singular}Controller.ts`,
     modelFileName: `${singular}Model.ts`,
-    routerFilename: `${singular}Routes.ts`,
+    routerFilename: `${singular}Router.ts`,
     schemaFileName: `${singular}Schema.ts`,
     //
     oneControllerPath: path.join(
@@ -20,12 +20,12 @@ const files = (singular?: string) => {
       'oneController.ts',
     ),
     oneModelPath: path.join(__dirname, '..', 'src', 'models', 'oneModel.ts'),
-    oneRoutesPath: path.join(__dirname, '..', 'src', 'routes', 'oneRouter.ts'),
+    oneRouterPath: path.join(__dirname, '..', 'src', 'routers', 'oneRouter.ts'),
     oneSchemaPath: path.join(__dirname, '..', 'src', 'yup', 'oneSchema.ts'),
     //
     newControllerPath: `./src/controllers/${singular}Controller.ts`,
     newModelPath: `./src/models/${singular}Model.ts`,
-    newRouterPath: `./src/routes/${singular}Routes.ts`,
+    newRouterPath: `./src/routers/${singular}Router.ts`,
     newSchemaPath: `./src/yup/${singular}Schema.ts`,
     //
     oneSetupTestPath: path.join(__dirname, '..', 'src', 'test', 'setup.ts'),

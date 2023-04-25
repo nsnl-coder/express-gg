@@ -13,7 +13,7 @@ const initializeProject = () => {
     'src',
     'src/config',
     'src/middlewares',
-    'src/routes',
+    'src/routers',
     'src/models',
     'src/controllers',
     'src/utils',
@@ -31,7 +31,7 @@ const initializeProject = () => {
   [
     'src/config/db.ts',
     'src/index.ts',
-    'src/routes/index.ts',
+    'src/routers/index.ts',
     'src/models/userModel.ts',
     './.env',
   ].forEach((pathname) => {

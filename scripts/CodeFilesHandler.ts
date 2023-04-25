@@ -24,7 +24,7 @@ class CodeFilesHandler {
     const onePaths = [
       this.files.oneControllerPath,
       this.files.oneModelPath,
-      this.files.oneRoutesPath,
+      this.files.oneRouterPath,
       this.files.oneSchemaPath,
     ];
 
@@ -87,8 +87,8 @@ class CodeFilesHandler {
     fs.writeFileSync(this.files.newModelPath, modelFileContent);
     console.log(chalk.green(`${this.files.modelFileName} created!`));
 
-    // routes:
-    fs.mkdirSync('./src/routes', { recursive: true });
+    // routers:
+    fs.mkdirSync('./src/routers', { recursive: true });
     fs.writeFileSync(this.files.newRouterPath, routerFileContent);
     console.log(chalk.green(`${this.files.routerFilename} created!`));
 
@@ -99,7 +99,7 @@ class CodeFilesHandler {
 
     // apply router to express app
     insertCode(
-      './src/routes/index.ts',
+      './src/routers/index.ts',
       '#insert__routers',
       `\nimport ${this.singular}Router from './${this.singular}Router';\nrouter.use(${this.singular}Router);`,
     );
@@ -109,7 +109,7 @@ class CodeFilesHandler {
     const oneFilesPaths = [
       this.files.oneControllerPath,
       this.files.oneModelPath,
-      this.files.oneRoutesPath,
+      this.files.oneRouterPath,
       this.files.oneSchemaPath,
     ];
 

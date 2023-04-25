@@ -1,7 +1,7 @@
 {
   "name": "express-gg",
   "version": "2.0.5",
-  "description": "express code generator for controllers, models and routes.",
+  "description": "express code generator for controllers, models and routers.",
   "main": "build/index.js",
   "jest": {
     "preset": "ts-jest",

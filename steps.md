@@ -1,7 +1,7 @@
 <!-- code file -->
 
 0. thinking about requirements and list down
-1. Change the auth & check for required fields in routes file
+1. Change the auth & check for required fields in router file
 2. Define schema for express, yup
 3. Make sure to parse req.body in: create one, update one and update many
 4. checkForExistence + failed if not exist

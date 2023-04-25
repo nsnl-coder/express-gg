@@ -60,13 +60,13 @@ Or, if you install it locally:
 
 - `controller`: already implement `crud operations` handler
 - `model`: contains mongoose schema
-- `routes`: contains all common route needed for a resource
+- `routers`: contains all common route needed for a resource
 - `yupschema`: this schema is used to define data validation rules
 - `postman`: sample postman collection, you can use this to import to postman
 
 ## Generate test files
 
-If you choose to generate test files, you got 35 pre-written test for all the routes.  
+If you choose to generate test files, you got 35 pre-written test for all the routers.  
 These are the common tests that are the same for every resource.  
 Therefore, you need to add more tests specific to every route such as auth tests.
 
@@ -108,7 +108,7 @@ These fields are being used to run test only, if you don't write test, simply ju
 
 ### Notes
 
-In `./src/routes/index.js`, there is one line of code:
+In `./src/routers/index.js`, there is one line of code:
 
 ```javascript
 // #insert__routers
